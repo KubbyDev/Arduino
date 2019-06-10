@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Interface de pilotage Arduino</title>
+</head>
+<body>
+<script src="script.js"></script>
+<div class="main">
+    <p>
+        Adresse publique du shield : <br />
+        http://<input type="text" id="ip" value="192.168.0.136" size="15"/>
+        : <input type="text" id="port" value="4200" size="5"/>
+    </p>
+    <hr />
+    <p>
+        <input type="checkbox" id="broche3" name="broche3" />
+        <label for="broche3">Activer Broche 3.</label>
+        Etat : <input type="radio" id="etat3" disabled />
+    </p>
+    <p>
+        <input type="checkbox" id="broche4" name="broche4" />
+        <label for="broche4">Activer Broche 4.</label>
+        Etat : <input type="radio" id="etat4" disabled />
+    </p>
+    <p>
+        <input type="checkbox" id="broche5" name="broche5" />
+        <label for="broche5">Activer Broche 5.</label>
+        Etat : <input type="radio" id="etat5" disabled />
+    </p>
+    <p>
+        PWM : 0<input type="range" min="0" max="255" id="pwm" />255
+    </p>
+    <p>
+        A0 : <meter min="0" max="1023" id="a0" />
+    </p>
+    <button id="envoyer">Executer !</button>
+    <p>
+        Millis : <span id="millis">0</span> ms
+    </p>
+</div>
+</body>
+</html>
