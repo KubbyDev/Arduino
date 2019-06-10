@@ -1,0 +1,21 @@
+Joystick
+
+Tous les boutons sont des interrupteurs entre la masse et un des fils (pas de sortie analogique)
+Le C marche pas tres bien
+
+Masse:            Orange
+Joystick avant:   Jaune 
+Joystick arriere: Bleu
+Joystick droite:  Marron
+Joystick gauche:  Blanc
+Bouton A:         Rouge
+Bouton B:         Noir
+Bouton C:         Gris
+Bouton Joystick:  Vert
+
+
+
+Ethernet shield
+
+Adresse IP: 192.168.0.136
+Adresse MAC: 90A2 DA0E A57E
