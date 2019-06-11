@@ -1,14 +1,9 @@
-// Ces deux bibliothèques sont indispensables pour le shield
 #include <SPI.h>
 #include <Ethernet.h>
 
-// L'adresse MAC du shield
+//Adresse du Ethernet Shield
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x0E, 0xA5, 0x7E };
-// L'adresse IP que prendra le shield
 IPAddress ip(192,168,0,136);
-
-// Initialise notre serveur
-// Ce dernier écoutera sur le port 4200
 EthernetServer serveur(4200);
 
 char *url = (char *)malloc(100); // L'url recu à stocker
@@ -47,8 +42,10 @@ void setup()
 }
 
 void loop() {
+  
   // Regarde si un client est connecté et attend une réponse
   EthernetClient client = serveur.available();
+  
   if (client) { // Un client est là ?
     Serial.println("Ping !");
     url = ""; // on remet à zéro notre chaîne tampon
