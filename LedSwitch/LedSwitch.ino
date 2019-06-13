@@ -49,9 +49,11 @@ void loop() {
       if (client.available()) {
 
         char newChar = client.read();
-        if (newChar == '\n') { //Si on a fini la lecture on fait le traitement
+        if (newChar == '\n' || index > 100) { //Si on a fini la lecture on fait le traitement
 
           digitalWrite(3, readRequest(url));
+          respond(client);
+          
           break; //On sort du while
         }
         else { //Sinon on continue la lecture
@@ -75,4 +77,26 @@ boolean readRequest(char request[]) {
 
   //Une fois qu'on est a b=, on regarde ce qu'il y a juste apres
   return request[i + 2] == '3';
+}
+
+void respond(EthernetClient client) {
+
+  //Header
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: application/json");
+  client.println("Access-Control-Allow-Origin: *");
+  client.println();
+
+  //Body
+  client.println("{");
+  
+  client.print("\t\"uptime\": ");
+  client.print(millis());
+  
+  client.println(",");
+
+  client.print("\t\"3\": ");
+  client.print(digitalRead(3));
+  
+  client.println("}");
 }
