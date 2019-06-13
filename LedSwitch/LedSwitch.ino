@@ -5,7 +5,7 @@
 
 //Adresse du Ethernet Shield
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x0E, 0xA5, 0x7E };
-IPAddress ip(192, 168, 0, 136);
+IPAddress ip(192, 168, 1, 28);
 EthernetServer serveur(4200);
 
 char *url = (char *)malloc(100); // L'url recu à stocker

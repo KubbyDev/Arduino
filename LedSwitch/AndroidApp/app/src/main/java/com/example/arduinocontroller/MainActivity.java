@@ -6,16 +6,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,11 +40,32 @@ public class MainActivity extends AppCompatActivity {
         sendHTTPRequest("?b=");
     }
 
+    /*
+    private void sendHTTPRequest(String arguments) {
+
+        OkHttpClient client = new OkHttpClient();
+        String url = "http://192.168.1.28:4200/";// + arguments;
+
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            }
+        });
+    }
+    */
+
+
     private void sendHTTPRequest(String arguments) {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://localhost:4000/" + arguments;
+        String url = "http://192.168.1.28:4200/" + arguments;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -58,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
 
     /*
     private void sendHTTPRequest(final String arguments) {
@@ -97,4 +126,5 @@ public class MainActivity extends AppCompatActivity {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
     */
+
 }
