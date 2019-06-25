@@ -1,5 +1,17 @@
-#include <Adafruit_BME280.h>
+
+
+//J'ai pas reussi a faire marcher le capteur de pression :'(
+
+
+
+//Pression
+#include <SFE_BMP180.h>
+#include <Wire.h>
+
+//Humidite
 #include <dht.h>
+
+//Connection
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -20,8 +32,7 @@ byte PRESSURE1_PIN = A4;
 byte PRESSURE2_PIN = A5;
 
 dht humiditySensor;
-float SEALEVELPRESSURE_HPA = 1013.25f;
-Adafruit_BME280 bme;
+SFE_BMP180 bmp180;
 
 void setup() {
 
@@ -36,12 +47,16 @@ void setup() {
   pinMode(PRESSURE1_PIN, INPUT);
   pinMode(PRESSURE2_PIN, INPUT);
 
-  //if (!bme.begin(0x76)) {
-    //Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    //while (1);
-  //}
-
   Serial.println("begin");
+  
+  if (bmp180.begin() == 0) {
+    Serial.println("Could not find a valid BMP180 sensor, check wiring!");
+    //while (1);
+  }
+  else {
+    bmp180.startTemperature();
+    bmp180.startPressure(3);
+  }
   
   connect();
 
@@ -65,14 +80,19 @@ void connect() {
 
 void loop() {    
 
-  bool sound = digitalRead(SOUND_PIN);
+  bool sound = analogRead(SOUND_PIN);
   
   int humidity;
   if(humiditySensor.read11(HUMIDITY_PIN) != 0)
     humidity = humiditySensor.humidity;
 
-  int pressure ;//= bme.readPressure() / 100.0F; //hPa
-  int altitude ;//= bme.readAltitude(SEALEVELPRESSURE_HPA);
+  double T;
+  double pressure;
+  bmp180.getTemperature(T);
+  bmp180.getPressure(pressure, T);
+  int altitude;// = bme.readAltitude(SEALEVELPRESSURE_HPA);
+  bmp180.startTemperature();
+  bmp180.startPressure(3);
 
   int smoke = analogRead(SMOKE_PIN);
 
