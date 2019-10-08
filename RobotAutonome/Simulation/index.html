@@ -6,10 +6,45 @@
 </head>
 <body>
 
-<script src="Math/Vector.js"></script>
-<script src="Math/Line.js"></script>
+<canvas id="myCanvas" width="1400" height="700"></canvas>
 
+<script src="Tools/Vector.js"></script>
+<script src="Tools/Line.js"></script>
+<script src="Tools/Tools.js"></script>
+<script src="SceneObject.js"></script>
+<script src="Scene.js"></script>
+<script src="Robot/Robot.js"></script>
 
+<script>
+
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    addWall(new Line(new Vector(5,5), new Vector(1395,5)).setWidth(5));
+    addWall(new Line(new Vector(1395,5), new Vector(1395,695)).setWidth(5));
+    addWall(new Line(new Vector(1395,695), new Vector(5,695)).setWidth(5));
+    addWall(new Line(new Vector(5,695), new Vector(5,5)).setWidth(5));
+
+    let sceneobject = new SceneObject();
+    sceneobject.color = "#11ff44";
+    sceneobject.width = 30;
+    sceneobject.length = 100;
+    sceneobject.position = new Vector(500, 200);
+    addObject(sceneobject);
+
+    let robot = new Robot();
+    robot.color = "#ff002a";
+    robot.width = 5;
+    robot.length = 12;
+    robot.position = new Vector(500, 400);
+    addObject(robot);
+
+    setInterval(() => {
+        updateScene();
+        drawScene();
+    }, 10);
+
+</script>
 
 </body>
 </html>

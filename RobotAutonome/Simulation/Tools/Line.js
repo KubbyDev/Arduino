@@ -1,9 +1,12 @@
 class Line {
 
+    //This class has been copy/paste from the LearningCars project
+
     start = new Vector(0,0);
     end = new Vector(0,0);
     visible = true;
-    color = "#ffffff";
+    color = "#000000";
+    width = 2; //Only graphical
 
     constructor(start, end) {
         this.start = start;
@@ -18,6 +21,11 @@ class Line {
 
     setVisible(visible) {
         this.visible = visible;
+        return this;
+    }
+
+    setWidth(width) {
+        this.width = width;
         return this;
     }
 
@@ -80,6 +88,7 @@ class Line {
 
         if(this.visible) {
             ctx.beginPath();
+            ctx.strokeWidth = this.width;
             ctx.strokeStyle = this.color;
             ctx.moveTo(this.start.x, this.start.y);
             ctx.lineTo(this.end.x, this.end.y);

@@ -1,5 +1,7 @@
 class Vector {
 
+    //This class has been copy/paste from the LearningCars project
+
     x;
     y;
 
