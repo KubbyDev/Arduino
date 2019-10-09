@@ -19,10 +19,8 @@ class SceneObject {
 
     //Returns the position of the corners of the object (calculates them if necessary)
     getCorners() {
-
         if(!this.areCornersCorrect)
             this.calcCorners();
-
         return this.corners;
     }
 
@@ -63,14 +61,9 @@ class SceneObject {
         drawRect(this.getCorners(), this.color);
     }
 
+    //Checks if one of the lines of the object is colliding with one of the other lines of the scene
     isColliding() {
-
         this.getCorners();
-
-        for(let line of this.hitboxLines)
-            if(line.isColliding(hitboxLines.filter(line => this.hitboxLines.indexOf(line) === -1)))
-                return true;
-
-        return false;
+        return Line.isColliding(this.hitboxLines, sceneHitboxLines.filter(line => this.hitboxLines.indexOf(line) === -1));
     }
 }

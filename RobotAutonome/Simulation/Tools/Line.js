@@ -4,9 +4,8 @@ class Line {
 
     start = new Vector(0,0);
     end = new Vector(0,0);
-    visible = true;
     color = "#000000";
-    width = 2; //Only graphical
+    width = 2; //This parameter only influences the display
 
     constructor(start, end) {
         this.start = start;
@@ -16,11 +15,6 @@ class Line {
     setStartEnd(start, end) {
         this.start = start;
         this.end = end;
-        return this;
-    }
-
-    setVisible(visible) {
-        this.visible = visible;
         return this;
     }
 
@@ -34,20 +28,28 @@ class Line {
         return this;
     }
 
-    isColliding(lines) {
-
+    //Checks if one of the lines is colliding with one of the otherLines
+    static isColliding(lines, otherLines) {
         for(let line of lines)
-            if(this.collidesWith(line))
+            if(line.isColliding(otherLines))
                 return true;
-
         return false;
     }
 
-    collidesWith(line) {
+    //Checks if this line collides with one of the lines in parameter
+    isColliding(lines) {
+        for(let line of lines)
+            if(this.collidesWith(line))
+                return true;
+        return false;
+    }
 
+    //Checks if this line collides with the line in parameter
+    collidesWith(line) {
         return this.getCollisionPoint(line) !== null;
     }
 
+    //Returns the collision point between this line and the one in parameter
     getCollisionPoint(other) {
 
         let point; //Le point d'intersection
@@ -85,15 +87,12 @@ class Line {
     }
 
     draw() {
-
-        if(this.visible) {
-            ctx.beginPath();
-            ctx.strokeWidth = this.width;
-            ctx.strokeStyle = this.color;
-            ctx.moveTo(this.start.x, this.start.y);
-            ctx.lineTo(this.end.x, this.end.y);
-            ctx.stroke();
-            ctx.closePath();
-        }
+        ctx.beginPath();
+        ctx.strokeWidth = this.width;
+        ctx.strokeStyle = this.color;
+        ctx.moveTo(this.start.x, this.start.y);
+        ctx.lineTo(this.end.x, this.end.y);
+        ctx.stroke();
+        ctx.closePath();
     }
 }

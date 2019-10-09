@@ -50,6 +50,7 @@ class Vector {
         return Math.sqrt(Vector.sqrDistance(a, b));
     }
 
+    //Calculates a unit vector pointing in the angle direction (0 => (1,0), 1 => (0,1)). Angle in degrees
     static fromOrientation(angle) {
         angle = angle*Math.PI/180;
         return new Vector(Math.cos(angle), Math.sin(angle));
@@ -63,6 +64,7 @@ class Vector {
         console.log(this.toString());
     }
 
+    //Constructs a line from startPoint to startPoint+thisVector
     toLine(startPoint) {
         return new Line().setStartEnd(startPoint, startPoint.add(this))
     }
