@@ -10,7 +10,6 @@ function updateScene() {
 
 //Clears the canvas and draws all the objects of the scene
 function drawScene() {
-    ctx.clearRect(0,0, canvas.width, canvas.height);
     for(let line of sceneVisibleLines)
        line.draw();
     for(let scobj of objects)

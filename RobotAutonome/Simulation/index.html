@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="1400" height="700"></canvas>
+<canvas id="myCanvas" width="1900" height="1000"></canvas>
 
 <script src="Tools/Vector.js"></script>
 <script src="Tools/Line.js"></script>
@@ -14,33 +14,41 @@
 <script src="SceneObject.js"></script>
 <script src="Scene.js"></script>
 <script src="Robot/Robot.js"></script>
+<script src="Robot/Sonar.js"></script>
 <script src="Robot/Control/Main.js"></script>
+<script src="Robot/Control/InternMap.js"></script>
+<script src="Robot/Control/BooleanMatrix.js"></script>
 
 <script>
 
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    addWall(new Line(new Vector(5,5), new Vector(1395,5)).setWidth(5));
-    addWall(new Line(new Vector(1395,5), new Vector(1395,695)).setWidth(5));
-    addWall(new Line(new Vector(1395,695), new Vector(5,695)).setWidth(5));
-    addWall(new Line(new Vector(5,695), new Vector(5,5)).setWidth(5));
+    addWall(new Line(new Vector(5,5), new Vector(495,5)).setWidth(5));
+    addWall(new Line(new Vector(495,5), new Vector(495,495)).setWidth(5));
+    addWall(new Line(new Vector(495,495), new Vector(5,495)).setWidth(5));
+    addWall(new Line(new Vector(5,495), new Vector(5,5)).setWidth(5));
 
     let sceneobject = new SceneObject();
     sceneobject.color = "#4f534e";
     sceneobject.width = 30;
     sceneobject.length = 100;
-    sceneobject.position = new Vector(500, 200);
+    sceneobject.position = new Vector(200, 200);
     addObject(sceneobject);
 
     let robot = new Robot();
     robot.color = "#ff002a";
     robot.width = 5;
     robot.length = 12;
-    robot.position = new Vector(500, 400);
+    robot.position = new Vector(100, 400);
+    robot.controlAlgorithm.resetPositionAndRotation(
+        robot.position.multiply(0.24), //Conversion between simulated world and intern map
+        robot.rotation
+    );
     addObject(robot);
 
     setInterval(() => {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
         updateScene();
         drawScene();
     }, 10);

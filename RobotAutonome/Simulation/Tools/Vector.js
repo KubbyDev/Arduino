@@ -68,4 +68,8 @@ class Vector {
     toLine(startPoint) {
         return new Line().setStartEnd(startPoint, startPoint.add(this))
     }
+
+    copy() {
+        return new Vector(this.x, this.y);
+    }
 }
