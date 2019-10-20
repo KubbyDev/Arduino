@@ -1,34 +1,41 @@
 class InternMap {
 
     matrix;
+    controlAlgorithm;
 
-    constructor() {
+    constructor(controlAlgorithm) {
+        this.controlAlgorithm = controlAlgorithm;
         this.matrix = new BooleanMatrix(120, 120);
     }
 
-    update(expectedPosition, expectedRotation, distance) {
-        let wallPosition = Vector.fromOrientation(expectedRotation).multiply(distance).add(expectedPosition);
+    update() {
+
+        let wallDirection = Vector.fromOrientation(this.controlAlgorithm.expectedRotation);
+
+        //The *0.24 is for the conversion from simulation world units to intern map units
+        let hitDistance = this.controlAlgorithm.sonar.getDistance() / ControlAlgorithm.PIXEL_LENGTH;
+
+        //Empties all the pixels between the robot and the hit point
+        for(let i = 0; i < hitDistance; i++) {
+            let position = wallDirection.multiply(i).add(this.controlAlgorithm.expectedPosition);
+            this.matrix.setValue(Math.round(position.x), Math.round(position.y), false);
+        }
+
+        //Fills the pixel at the hit point
+        let wallPosition = wallDirection.multiply(hitDistance).add(this.controlAlgorithm.expectedPosition);
         this.matrix.setValue(Math.round(wallPosition.x), Math.round(wallPosition.y), true);
     }
 
-    draw(robotPosition, robotRotation) {
+    getClosest() {
 
-        let offsetX = 550;
-        let offsetY = 10;
+        let direction = Vector.fromOrientation(this.controlAlgorithm.expectedRotation);
+        let hitDistance = this.controlAlgorithm.sonar.getDistance() / ControlAlgorithm.PIXEL_LENGTH;
+        for(let i = -ControlAlgorithm.INACCURACY_THRESHOLD; i <= ControlAlgorithm.INACCURACY_THRESHOLD; i++) {
+            let position = direction.multiply(i+hitDistance).add(this.controlAlgorithm.expectedPosition);
+            if(this.matrix.getValue(Math.round(position.x), Math.round(position.y)))
+                return { found: true, adjust: direction.multiply(i)};
+        }
 
-        //Clears the map with grey so we can see the bounds
-        ctx.fillStyle = "#CCCCCC";
-        ctx.fillRect(offsetX, offsetY, 120*4, 120*4);
-
-        //Sets every pixel where there is something to black
-        ctx.fillStyle = "#000000";
-        for (let y = 0; y < this.matrix.sizeY; y++)
-            for (let x = 0; x < this.matrix.sizeX; x++)
-                if (this.matrix.getValue(x, y))
-                    ctx.fillRect(offsetX + (x*4), offsetY + (y*4), 4, 4);
-
-        //Draw the robot
-        ctx.fillStyle = "#ff0938";
-        ctx.fillRect(offsetX + (robotPosition.x)*4 +2 -5, offsetY + (robotPosition.y)*4 +2 -5, 10, 10);
+        return { found: false };
     }
 }

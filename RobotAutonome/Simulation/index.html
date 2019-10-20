@@ -15,7 +15,7 @@
 <script src="Scene.js"></script>
 <script src="Robot/Robot.js"></script>
 <script src="Robot/Sonar.js"></script>
-<script src="Robot/Control/Main.js"></script>
+<script src="Robot/Control/ControlAlgorihtm.js"></script>
 <script src="Robot/Control/InternMap.js"></script>
 <script src="Robot/Control/BooleanMatrix.js"></script>
 
@@ -32,15 +32,31 @@
     let sceneobject = new SceneObject();
     sceneobject.color = "#4f534e";
     sceneobject.width = 30;
-    sceneobject.length = 100;
+    sceneobject.length = 30;
     sceneobject.position = new Vector(200, 200);
     addObject(sceneobject);
+
+    let sceneobject2 = new SceneObject();
+    sceneobject2.color = "#4f534e";
+    sceneobject2.width = 30;
+    sceneobject2.length = 30;
+    sceneobject2.position = new Vector(300, 400);
+    addObject(sceneobject2);
+
+    /*
+    let sceneobject3 = new SceneObject();
+    sceneobject3.color = "#4f534e";
+    sceneobject3.width = 30;
+    sceneobject3.length = 30;
+    sceneobject3.position = new Vector(250, 100);
+    addObject(sceneobject3);
+    */
 
     let robot = new Robot();
     robot.color = "#ff002a";
     robot.width = 5;
     robot.length = 12;
-    robot.position = new Vector(100, 400);
+    robot.position = new Vector(250, 250);
     robot.controlAlgorithm.resetPositionAndRotation(
         robot.position.multiply(0.24), //Conversion between simulated world and intern map
         robot.rotation

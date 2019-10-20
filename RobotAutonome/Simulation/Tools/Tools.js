@@ -16,3 +16,8 @@ function drawSquare(position, halfside, color) {
     ctx.rect(position.x - halfside, position.y - halfside, halfside*2, halfside*2);
     ctx.fill();
 }
+
+//Generates a random noise between -amount and +amount
+function noise(amount) {
+    return (Math.random()*2 -1)*amount;
+}
