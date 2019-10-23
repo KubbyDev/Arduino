@@ -1,8 +1,5 @@
 class ControlAlgorithm {
 
-    //If the sonar finds a wall and the distance between the closest point on the map and the found point is
-    //less than this threshold, the robot will reposition itself instead of making a new point. In intern map units
-    static INACCURACY_THRESHOLD = 3; //Must be an integer
     //The length of a pixel of the map in the simulation world units (pixels)
     static PIXEL_LENGTH = 5;
 
@@ -11,6 +8,7 @@ class ControlAlgorithm {
     map;
     lowResMap;
     sonar;
+    lastUpdateTime = timeSeconds();
 
     targetPosition;
 
@@ -27,16 +25,30 @@ class ControlAlgorithm {
 
     update() {
 
+        let deltaTime = timeSeconds() - this.lastUpdateTime;
+        this.lastUpdateTime = timeSeconds();
+
         let sonarData = this.sonar.getDistance();
-        let forwardInput = 0.3 * sonarData/Sonar.RANGE;
-        let turnInput = 0.1;
+
+        let forwardInput = 1;
+        if(isFinite(sonarData)) //The sonar distance is infinite if the distance > Sonar.RANGE
+            forwardInput = sonarData/Sonar.RANGE;
+
+        let targetAngle = 180/Math.PI
+            * Math.atan2(this.targetPosition.y - this.expectedPosition.y, this.targetPosition.x - this.expectedPosition.x);
+        if(Math.abs(targetAngle - this.expectedRotation) > 180)
+            targetAngle *= -1;
+        let turnInput = 0.5 * (targetAngle > this.expectedRotation ? -1 : 1);
 
         //The last factors are the turn rate of the robot and its speed multiplied
         //by the size ratio between the intern map and the simulation world.
         //They will have to be determined experimentaly on the real robot
-        this.expectedPosition.x += Math.cos(this.expectedRotation*Math.PI/180) * forwardInput * 3/ControlAlgorithm.PIXEL_LENGTH;
-        this.expectedPosition.y += Math.sin(this.expectedRotation*Math.PI/180) * forwardInput * 3/ControlAlgorithm.PIXEL_LENGTH;
-        this.expectedRotation += -turnInput * 2;
+        this.expectedPosition.x += Math.cos(this.expectedRotation*Math.PI/180)
+            * forwardInput * Robot.SPEED/ControlAlgorithm.PIXEL_LENGTH * deltaTime;
+        this.expectedPosition.y += Math.sin(this.expectedRotation*Math.PI/180)
+            * forwardInput * Robot.SPEED/ControlAlgorithm.PIXEL_LENGTH * deltaTime;
+        this.expectedRotation += -turnInput * Robot.TURNRATE * deltaTime;
+        this.expectedRotation = clampAngle(this.expectedRotation);
 
         //Updates the map according to the data of the sonar
         if(isFinite(sonarData)) //The sonar distance is infinite if the distance > Sonar.RANGE
@@ -55,8 +67,6 @@ class ControlAlgorithm {
                 })(x, y);
                 this.lowResMap.matrix.setValue(x, y, value);
             }
-
-
 
         return [
             forwardInput,

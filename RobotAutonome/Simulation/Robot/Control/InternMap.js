@@ -25,17 +25,4 @@ class InternMap {
         let wallPosition = wallDirection.multiply(hitDistance).add(this.controlAlgorithm.expectedPosition);
         this.matrix.setValue(Math.round(wallPosition.x), Math.round(wallPosition.y), true);
     }
-
-    getClosest() {
-
-        let direction = Vector.fromOrientation(this.controlAlgorithm.expectedRotation);
-        let hitDistance = this.controlAlgorithm.sonar.getDistance() / ControlAlgorithm.PIXEL_LENGTH;
-        for(let i = -ControlAlgorithm.INACCURACY_THRESHOLD; i <= ControlAlgorithm.INACCURACY_THRESHOLD; i++) {
-            let position = direction.multiply(i+hitDistance).add(this.controlAlgorithm.expectedPosition);
-            if(this.matrix.getValue(Math.round(position.x), Math.round(position.y)))
-                return { found: true, adjust: direction.multiply(i)};
-        }
-
-        return { found: false };
-    }
 }

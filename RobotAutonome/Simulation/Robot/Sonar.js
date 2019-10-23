@@ -40,6 +40,8 @@ class Sonar  {
     }
 
     getDistance() {
-        return Math.min(this.distance, Sonar.RANGE);
+        if(this.distance > Sonar.RANGE)
+            return Infinity;
+        return this.distance + this.distance * noise(0.05);
     }
 }

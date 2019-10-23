@@ -21,3 +21,25 @@ function drawSquare(position, halfside, color) {
 function noise(amount) {
     return (Math.random()*2 -1)*amount;
 }
+
+function  timeSeconds() {
+    return new Date().getTime()/1000;
+}
+
+let mouseX = 0;
+let mouseY = 0;
+document.addEventListener('mousemove', function(event) {
+    mouseX = event.clientX - canvas.offsetLeft;
+    mouseY = event.clientY - canvas.offsetTop;
+});
+
+function getMousePosition() {
+    return new Vector(mouseX, mouseY);
+}
+
+function clampAngle(angle) {
+    angle = angle % 360;
+    if(angle < 0)
+        angle += 360;
+    return angle;
+}

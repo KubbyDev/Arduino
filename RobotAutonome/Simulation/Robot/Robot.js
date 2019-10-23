@@ -1,8 +1,13 @@
 class Robot extends SceneObject {
 
-    speed = 3;
-    turnRate = 2;
+    static SPEED = 50;
+    static TURNRATE = 50;
     sonar;
+
+    ctrlAlgoTime = 0; //The time left to update the control algorithm
+    lastInput = [0,0];
+
+    lastUpdateTime = timeSeconds(); //The moment the update function was last called
 
     constructor() {
         super();
@@ -13,15 +18,27 @@ class Robot extends SceneObject {
 
     update() {
 
+        //Sets the target position in the intern map coordinates
+        this.controlAlgorithm.targetPosition = getMousePosition().subtract(new Vector(550, 10)).divide(4);
+
+        let deltaTime = timeSeconds() - this.lastUpdateTime;
+        this.lastUpdateTime = timeSeconds();
+
         super.update();
 
         //Updates the sonar
         this.sonar.update();
 
         //Asks the control algorithm what to do
-        let input = this.controlAlgorithm.update();
-        this.moveForward(input[0] + noise(0.05));
-        this.turn(input[1] + noise(0.05));
+        //Only 20 times per second
+        if(this.ctrlAlgoTime <= 0) {
+            this.lastInput = this.controlAlgorithm.update();
+            this.ctrlAlgoTime = 0.05;
+        }
+        else
+            this.ctrlAlgoTime -= deltaTime;
+        this.moveForward(this.lastInput[0], deltaTime);
+        this.turn(this.lastInput[1], deltaTime);
 
         //Updates the position of the corners of the robot (and the hitbox at the same time) if necessary
         this.getCorners();
@@ -39,7 +56,7 @@ class Robot extends SceneObject {
         //Draws the intern map of the control algorithm
 
         let robotPosition = this.controlAlgorithm.expectedPosition;
-        let robotRotation = this.controlAlgorithm.expectedRotation;
+        let robotRotation = this.controlAlgorithm.expectedRotation; //TOOD Show the orientation
         let matrix = this.controlAlgorithm.map.matrix;
         let offsetX = 550;
         let offsetY = 10;
@@ -77,14 +94,15 @@ class Robot extends SceneObject {
                     ctx.fillRect(offsetX + (x*4), offsetY + (y*4), 4, 4);
     }
 
-    moveForward(enginePower) {
-        this.position.x += Math.cos(this.rotation*Math.PI/180)*enginePower*this.speed;
-        this.position.y += Math.sin(this.rotation*Math.PI/180)*enginePower*this.speed;
+    moveForward(enginePower, deltaTime) {
+        this.position.x += Math.cos(this.rotation*Math.PI/180) * (enginePower + noise(0.05)) * Robot.SPEED * deltaTime;
+        this.position.y += Math.sin(this.rotation*Math.PI/180) * (enginePower + noise(0.05)) * Robot.SPEED * deltaTime;
         this.areCornersCorrect = false;
     }
 
-    turn(input) {
-        this.rotation += this.turnRate * -input;
+    turn(input, deltaTime) {
+        this.rotation += Robot.TURNRATE * -(input + noise(0.05)) * deltaTime;
+        this.rotation = clampAngle(this.rotation);
         this.areCornersCorrect = false;
     }
 }
