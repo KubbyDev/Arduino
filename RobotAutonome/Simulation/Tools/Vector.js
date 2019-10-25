@@ -1,6 +1,6 @@
 class Vector {
 
-    //This class has been copy/paste from the LearningCars project
+    //This class is a copy/paste from the LearningCars project
 
     x;
     y;

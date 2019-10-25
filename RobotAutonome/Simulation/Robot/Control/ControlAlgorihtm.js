@@ -1,7 +1,8 @@
 class ControlAlgorithm {
 
     //The length of a pixel of the map in the simulation world units (pixels)
-    static PIXEL_LENGTH = 5;
+    static PIXEL_LENGTH = 7;
+    static INTERNMAP_SIZE = 96; //Must be multiple of 8
 
     expectedPosition;
     expectedRotation;
@@ -10,7 +11,7 @@ class ControlAlgorithm {
     sonar;
     lastUpdateTime = timeSeconds();
 
-    targetPosition;
+    target;
 
     constructor(sonar) {
         this.sonar = sonar;
@@ -30,15 +31,11 @@ class ControlAlgorithm {
 
         let sonarData = this.sonar.getDistance();
 
-        let forwardInput = 1;
-        if(isFinite(sonarData)) //The sonar distance is infinite if the distance > Sonar.RANGE
-            forwardInput = sonarData/Sonar.RANGE;
+        let targetPositions = findPath(this);
 
-        let targetAngle = 180/Math.PI
-            * Math.atan2(this.targetPosition.y - this.expectedPosition.y, this.targetPosition.x - this.expectedPosition.x);
-        if(Math.abs(targetAngle - this.expectedRotation) > 180)
-            targetAngle *= -1;
-        let turnInput = 0.5 * (targetAngle > this.expectedRotation ? -1 : 1);
+        let inputs = this.getMovementInput(targetPositions[0]);
+        let forwardInput = inputs[0];
+        let turnInput = inputs[1];
 
         //The last factors are the turn rate of the robot and its speed multiplied
         //by the size ratio between the intern map and the simulation world.
@@ -55,13 +52,13 @@ class ControlAlgorithm {
             this.map.update();
 
         //Calculates the lowResMap for the pathfinding algorithm
-        //Each pixel of the lowResMap is 8 pixels of the map. If one pixel in each 8x8 square is on, the pixel is on
-        for(let y = 0; y < 15; y++)
-            for(let x = 0; x < 15; x++) {
+        //Each pixel of the lowResMap is 4 pixels of the map. If one pixel in each 4x4 square is on, the pixel is on
+        for(let y = 0; y < ControlAlgorithm.INTERNMAP_SIZE/4; y++)
+            for(let x = 0; x < ControlAlgorithm.INTERNMAP_SIZE/4; x++) {
                 let value = ((x, y) => {
-                    for(let j = 0; j < 8; j++)
-                        for(let i = 0; i < 8; i++)
-                            if(this.map.matrix.getValue(i+x*8, j+y*8))
+                    for(let j = 0; j < 4; j++)
+                        for(let i = 0; i < 4; i++)
+                            if(this.map.matrix.getValue(i+x*4, j+y*4))
                                 return 1;
                     return 0;
                 })(x, y);
@@ -72,5 +69,24 @@ class ControlAlgorithm {
             forwardInput,
             turnInput,
         ];
+    }
+
+    //Calculates the inputs in order to reach the target
+    getMovementInput(target) {
+
+        // Calculates the needed turn input to reach the target
+        let targetAngle = 180/Math.PI * Math.atan2(target.y - this.expectedPosition.y, target.x - this.expectedPosition.x);
+        targetAngle = clampAngle(targetAngle);
+        if(targetAngle - this.expectedRotation > 180)
+            targetAngle -= 360;
+        if(targetAngle - this.expectedRotation < -180)
+            targetAngle += 360;
+        let angleDiff = Math.abs(targetAngle - this.expectedRotation);
+        let turnInput = 0.5 * (targetAngle > this.expectedRotation ? -1 : 1);
+
+        // If no big turn is needed, goes forward
+        let forwardInput = angleDiff > 10 ? 0 : 1;
+
+        return [forwardInput, turnInput];
     }
 }

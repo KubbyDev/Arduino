@@ -13,13 +13,13 @@ class BooleanMatrix {
     }
 
     getValue(x, y) {
-        if(x >= 0 && y >= 0 && x < 120 && y < 120)
+        if(x >= 0 && y >= 0 && x < this.sizeX && y < this.sizeY)
             return this.values[x][y];
         return false;
     }
 
     setValue(x, y, value) {
-        if(x >= 0 && y >= 0 && x < 120 && y < 120)
+        if(x >= 0 && y >= 0 && x < this.sizeX && y < this.sizeY)
             this.values[x][y] = value;
     }
 

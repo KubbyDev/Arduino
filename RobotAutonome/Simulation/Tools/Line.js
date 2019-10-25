@@ -1,6 +1,6 @@
 class Line {
 
-    //This class has been copy/paste from the LearningCars project
+    //This class is a copy/paste from the LearningCars project
 
     start = new Vector(0,0);
     end = new Vector(0,0);

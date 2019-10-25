@@ -5,7 +5,7 @@ class InternMap {
 
     constructor(controlAlgorithm) {
         this.controlAlgorithm = controlAlgorithm;
-        this.matrix = new BooleanMatrix(120, 120);
+        this.matrix = new BooleanMatrix(ControlAlgorithm.INTERNMAP_SIZE, ControlAlgorithm.INTERNMAP_SIZE);
     }
 
     update() {

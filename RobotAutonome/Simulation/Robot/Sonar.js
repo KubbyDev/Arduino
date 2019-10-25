@@ -15,6 +15,7 @@ class Sonar  {
 
     update() {
 
+        //Updates the line according to the new position/rotation of the robot
         this.line.setStartEnd(
             this.parentRobot.position,
             Vector.fromOrientation(this.parentRobot.rotation).multiply(Sonar.RANGE).add(this.parentRobot.position)

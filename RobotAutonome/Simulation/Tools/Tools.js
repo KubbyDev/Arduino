@@ -22,7 +22,8 @@ function noise(amount) {
     return (Math.random()*2 -1)*amount;
 }
 
-function  timeSeconds() {
+//Returns the current time in seconds
+function timeSeconds() {
     return new Date().getTime()/1000;
 }
 
@@ -37,6 +38,7 @@ function getMousePosition() {
     return new Vector(mouseX, mouseY);
 }
 
+//Wraps the angle to this interval [0,360] (degrees)
 function clampAngle(angle) {
     angle = angle % 360;
     if(angle < 0)

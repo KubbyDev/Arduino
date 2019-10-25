@@ -19,7 +19,7 @@ class Robot extends SceneObject {
     update() {
 
         //Sets the target position in the intern map coordinates
-        this.controlAlgorithm.targetPosition = getMousePosition().subtract(new Vector(550, 10)).divide(4);
+        this.controlAlgorithm.target = getMousePosition().subtract(new Vector(550, 10)).divide(4);
 
         let deltaTime = timeSeconds() - this.lastUpdateTime;
         this.lastUpdateTime = timeSeconds();
@@ -63,7 +63,7 @@ class Robot extends SceneObject {
 
         //Clears the map with grey so we can see the bounds
         ctx.fillStyle = "#CCCCCC";
-        ctx.fillRect(offsetX, offsetY, 120*4, 120*4);
+        ctx.fillRect(offsetX, offsetY, ControlAlgorithm.INTERNMAP_SIZE*4, ControlAlgorithm.INTERNMAP_SIZE*4);
 
         //Sets every pixel where there is something to black
         ctx.fillStyle = "#000000";
@@ -80,18 +80,18 @@ class Robot extends SceneObject {
 
         matrix = this.controlAlgorithm.lowResMap.matrix;
         offsetX = 1100;
-        offsetY = 220;
+        offsetY = 10;
 
         //Clears the map with grey so we can see the bounds
         ctx.fillStyle = "#CCCCCC";
-        ctx.fillRect(offsetX, offsetY, 15*4, 15*4);
+        ctx.fillRect(offsetX, offsetY, ControlAlgorithm.INTERNMAP_SIZE*4, ControlAlgorithm.INTERNMAP_SIZE*4); //Size is mapsize/4 *16
 
         //Sets every pixel where there is something to black
         ctx.fillStyle = "#000000";
         for (let y = 0; y < matrix.sizeY; y++)
             for (let x = 0; x < matrix.sizeX; x++)
                 if (matrix.getValue(x, y))
-                    ctx.fillRect(offsetX + (x*4), offsetY + (y*4), 4, 4);
+                    ctx.fillRect(offsetX + (x*16), offsetY + (y*16), 16, 16);
     }
 
     moveForward(enginePower, deltaTime) {
