@@ -12,11 +12,12 @@ class ControlAlgorithm {
     lastUpdateTime = timeSeconds();
 
     target;
+    targetPositions;
 
     constructor(sonar) {
         this.sonar = sonar;
         this.map = new InternMap(this);
-        this.lowResMap = new InternMap(this);
+        this.lowResMap = new Array(ControlAlgorithm.INTERNMAP_SIZE/4 * ControlAlgorithm.INTERNMAP_SIZE/4);
     }
 
     resetPositionAndRotation(newPosition, newRotation) {
@@ -31,11 +32,15 @@ class ControlAlgorithm {
 
         let sonarData = this.sonar.getDistance();
 
-        let targetPositions = findPath(this);
+        this.targetPositions = findPath(this);
 
-        let inputs = this.getMovementInput(targetPositions[0]);
-        let forwardInput = inputs[0];
-        let turnInput = inputs[1];
+        let forwardInput = 0;
+        let turnInput = 0;
+        if(this.targetPositions.length > 0) {
+            let inputs = this.getMovementInput(this.targetPositions[0]);
+            forwardInput = inputs[0];
+            turnInput = inputs[1];
+        }
 
         //The last factors are the turn rate of the robot and its speed multiplied
         //by the size ratio between the intern map and the simulation world.
@@ -50,20 +55,6 @@ class ControlAlgorithm {
         //Updates the map according to the data of the sonar
         if(isFinite(sonarData)) //The sonar distance is infinite if the distance > Sonar.RANGE
             this.map.update();
-
-        //Calculates the lowResMap for the pathfinding algorithm
-        //Each pixel of the lowResMap is 4 pixels of the map. If one pixel in each 4x4 square is on, the pixel is on
-        for(let y = 0; y < ControlAlgorithm.INTERNMAP_SIZE/4; y++)
-            for(let x = 0; x < ControlAlgorithm.INTERNMAP_SIZE/4; x++) {
-                let value = ((x, y) => {
-                    for(let j = 0; j < 4; j++)
-                        for(let i = 0; i < 4; i++)
-                            if(this.map.matrix.getValue(i+x*4, j+y*4))
-                                return 1;
-                    return 0;
-                })(x, y);
-                this.lowResMap.matrix.setValue(x, y, value);
-            }
 
         return [
             forwardInput,

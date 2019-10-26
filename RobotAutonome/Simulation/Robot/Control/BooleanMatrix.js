@@ -1,5 +1,7 @@
 class BooleanMatrix {
 
+    //This class is not that useful but in the C implementation it will (because each boolean will be encoded on 1 bit)
+
     values;
     sizeX;
     sizeY;

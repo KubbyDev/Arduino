@@ -72,4 +72,18 @@ class Vector {
     copy() {
         return new Vector(this.x, this.y);
     }
+
+    equals(other, threshold) {
+        if(threshold === undefined)
+            threshold = 0.001;
+        return Math.abs(this.x - other.x) < threshold && Math.abs(this.y - other.y) < threshold;
+    }
+
+    applyFunc(func) {
+        return new Vector(func(this.x), func(this.y));
+    }
+
+    round() {
+        return this.applyFunc(Math.round);
+    }
 }
