@@ -1,5 +1,5 @@
-#ifndef TESTS_BOOLEANMATRIX_H
-#define TESTS_BOOLEANMATRIX_H
+#ifndef BOOLEANMATRIX_H
+#define BOOLEANMATRIX_H
 
 typedef struct BooleanMatrix BooleanMatrix;
 
@@ -10,10 +10,11 @@ void destroyMatrix(BooleanMatrix* matrix);
 int getValue(BooleanMatrix* matrix, unsigned int x, unsigned int y);
 unsigned int getSizeX(BooleanMatrix* matrix);
 unsigned int getSizeY(BooleanMatrix* matrix);
+unsigned char getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y);
 
 //Setters
 void setValue(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanValue);
 void clear(BooleanMatrix* matrix);
 void fill(BooleanMatrix* matrix, int booleanValue);
 
-#endif //TESTS_BOOLEANMATRIX_H
+#endif //BOOLEANMATRIX_H

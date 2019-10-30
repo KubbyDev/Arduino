@@ -54,6 +54,12 @@ int getValue(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
     return res ? 1 : 0;
 }
 
+/** Returns the byte at position (x (horizontal), y (vertical)) 
+ * This byte encodes the values from (x,y) to (x+8, y) */
+unsigned char getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
+    return matrix->values[y*(matrix->bytesX) + x];
+}
+
 /** Returns the number of columns of the matrix */
 unsigned int getSizeX(BooleanMatrix* matrix) { return matrix->sizeX; }
 
