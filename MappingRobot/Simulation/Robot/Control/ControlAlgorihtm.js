@@ -1,8 +1,11 @@
 class ControlAlgorithm {
 
     //The length of a pixel of the map in the simulation world units (pixels)
-    static PIXEL_LENGTH = 7;
-    static INTERNMAP_SIZE = 96; //Must be multiple of 8
+    static PIXEL_LENGTH = 9;
+    static INTERNMAP_SIZE = 72; //Must be multiple of 8
+    static LOWRESMAP_SIZERATIO = 3;
+    static LOWRESMAP_SIZE = ControlAlgorithm.INTERNMAP_SIZE/ControlAlgorithm.LOWRESMAP_SIZERATIO;
+
 
     expectedPosition;
     expectedRotation;
@@ -17,7 +20,7 @@ class ControlAlgorithm {
     constructor(sonar) {
         this.sonar = sonar;
         this.map = new InternMap(this);
-        this.lowResMap = new Array(ControlAlgorithm.INTERNMAP_SIZE/4 * ControlAlgorithm.INTERNMAP_SIZE/4);
+        this.lowResMap = new Array(ControlAlgorithm.LOWRESMAP_SIZE * ControlAlgorithm.LOWRESMAP_SIZE);
     }
 
     resetPositionAndRotation(newPosition, newRotation) {
