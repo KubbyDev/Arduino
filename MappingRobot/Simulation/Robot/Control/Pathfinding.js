@@ -12,15 +12,21 @@ function findPath(controlAlgo) {
     }
 
     //Calculates the lowResMap
-    //Each pixel of the lowResMap is 3 pixels of the map. If one pixel in each 3x3 square is on, the pixel is on
+    //Each pixel on the lowResMap represents a 3x3 square in the real map.
+    //It is lit if at least one pixel in a 5x5 square in the real map is lit.
     for(let y = 0; y < ControlAlgorithm.LOWRESMAP_SIZE; y++) {
         for(let x = 0; x < ControlAlgorithm.LOWRESMAP_SIZE; x++) {
             controlAlgo.lowResMap[y*ControlAlgorithm.LOWRESMAP_SIZE + x] =
                 ((x, y) => {
-                    for (let j = 0; j < ControlAlgorithm.LOWRESMAP_SIZERATIO; j++)
-                        for (let i = 0; i < ControlAlgorithm.LOWRESMAP_SIZERATIO; i++)
-                            if (controlAlgo.map.matrix.getValue(i + x * ControlAlgorithm.LOWRESMAP_SIZERATIO, j + y * ControlAlgorithm.LOWRESMAP_SIZERATIO))
+                    let add = Math.floor(ControlAlgorithm.LOWRESMAP_SIZERATIO/2);
+                    for (let j = -add; j <= ControlAlgorithm.LOWRESMAP_SIZERATIO+add; j++) {
+                        for (let i = -add; i < ControlAlgorithm.LOWRESMAP_SIZERATIO+add; i++) {
+                            let testX = i + x * ControlAlgorithm.LOWRESMAP_SIZERATIO;
+                            let testY = j + y * ControlAlgorithm.LOWRESMAP_SIZERATIO;
+                            if (inBoundsReal(testX, testY) && controlAlgo.map.matrix.getValue(testX, testY))
                                 return 255;
+                        }
+                    }
                     return 254;
                 })(x, y);
         }
@@ -34,6 +40,7 @@ function findPath(controlAlgo) {
         [1,0,1], [1,1,1.414], [0,1,1], [-1,1,1.414], [-1,0,1], [-1,-1,1.414], [0,-1,1], [1,-1,1.414]
     ];
 
+    //Calculates the distances from the target
     let changed = true;
     while(changed) {
 
@@ -45,9 +52,7 @@ function findPath(controlAlgo) {
                 for(let offset of offsets) {
                     let newX = x+offset[0];
                     let newY = y+offset[1];
-                    if(newX >= 0 && newY >= 0
-                        && newX < ControlAlgorithm.LOWRESMAP_SIZE && newY < ControlAlgorithm.LOWRESMAP_SIZE
-                        && get(newX, newY)+offset[2] < get(x,y)) {
+                    if(inBoundsLowRes(newX, newY) && get(newX, newY)+offset[2] < get(x,y)) {
                         set(x, y, get(newX, newY)+offset[2]);
                         changed = true;
                     }
@@ -66,9 +71,7 @@ function findPath(controlAlgo) {
         for(let i = 0; i < offsets.length; i++) {
             let newX = pos.x+offsets[i][0];
             let newY = pos.y+offsets[i][1];
-            if(newX >= 0 && newY >= 0
-                && newX < ControlAlgorithm.LOWRESMAP_SIZE && newY < ControlAlgorithm.LOWRESMAP_SIZE
-                && get(newX, newY) < min) {
+            if(inBoundsLowRes(newX, newY) && get(newX, newY) < min) {
                 min = get(newX, newY);
                 minIndex = i;
             }
@@ -78,5 +81,37 @@ function findPath(controlAlgo) {
         tries++;
     }
 
-    return res;
+    //Removes all the useless keys on the path
+    let current = controlAlgo.expectedPosition.divide(ControlAlgorithm.LOWRESMAP_SIZERATIO).round();
+    let cleaned = [];
+    let i = 0; //i is the point that will possibly be removed
+    while(i < res.length-1) {
+        if(!areAligned(current, res[i], res[i+1])) {
+            cleaned.push(res[i]);
+            current = res[i];
+        }
+        i++;
+    }
+    if(res.length > 0)
+        cleaned.push(res[res.length-1]); //The target is always in the path
+
+    return cleaned;
+}
+
+function areAligned(start, middle, end) {
+    let u = middle.subtract(start);
+    let v = end.subtract(start);
+    if(v.x === 0) return u.x === 0;
+    if(v.y === 0) return u.y === 0;
+    return Math.abs(u.x/v.x - u.y/v.y) < 0.01;
+}
+
+function inBoundsLowRes(x, y) {
+    return x >= 0 && y >= 0
+    && x < ControlAlgorithm.LOWRESMAP_SIZE && y < ControlAlgorithm.LOWRESMAP_SIZE;
+}
+
+function inBoundsReal(x, y) {
+    return x >= 0 && y >= 0
+        && x < ControlAlgorithm.INTERNMAP_SIZE && y < ControlAlgorithm.INTERNMAP_SIZE;
 }
