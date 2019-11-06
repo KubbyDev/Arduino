@@ -10,6 +10,6 @@ Vector* newVector(float x, float y);
 void vectorAdd(Vector* destination, Vector* other);
 void vectorMult(Vector* destination, float k);
 Vector* vectorCopy(Vector* source);
-Vector* vectorfromRot(angle);
+Vector* vectorfromRot(float angle);
 
 #endif //VECTOR_H

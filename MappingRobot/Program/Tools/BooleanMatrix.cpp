@@ -19,12 +19,13 @@ struct BooleanMatrix {
 /** Constructs a matrix containing sizeX * sizeY booleans */
 BooleanMatrix* newMatrix(unsigned int sizeX, unsigned int sizeY) {
 
-    BooleanMatrix* matrix = malloc(sizeof(unsigned int)*3 + sizeof(unsigned char*));
+    BooleanMatrix* matrix = (BooleanMatrix*) malloc(
+            sizeof(unsigned int)*3 + sizeof(unsigned char*));
 
     //The number of bytes to allocate for each line
     unsigned int bytesX = (unsigned int)ceilf((float)sizeX/8);
 
-    matrix->values = malloc(sizeof(unsigned char) * bytesX * sizeY);
+    matrix->values = (unsigned char*) malloc(sizeof(unsigned char) * bytesX * sizeY);
     matrix->sizeX = sizeX;
     matrix->sizeY = sizeY;
     matrix->bytesX = bytesX;

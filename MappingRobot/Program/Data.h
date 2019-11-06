@@ -15,7 +15,7 @@ Vector* position = newVector(0,0);
 float rotation = 0;
 
 // Sonar data (last distance measured in cm)
-float lastDistance
+float lastDistance = 0;
 
 // Last forward input (1 = full forward, -1 = full backward)
 float forwardInput = 0;

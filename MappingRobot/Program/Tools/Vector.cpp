@@ -1,11 +1,12 @@
 #include "Vector.h"
 
+#include <stdlib.h>
 #include <math.h>
 
 //A very simple 2D vector class
 
 Vector* newVector(float x, float y) {
-    Vector* vec = malloc(sizeof(float)*2);
+    Vector* vec = (Vector*) malloc(sizeof(float)*2);
     vec->x = x;
     vec->y = y;
     return vec;
@@ -25,6 +26,6 @@ Vector* vectorCopy(Vector* source) {
     return newVector(source->x, source->y);
 }
 
-Vector* vectorfromRot(angle) {
+Vector* vectorfromRot(float angle) {
     return newVector(cos(angle), sin(angle));
 }

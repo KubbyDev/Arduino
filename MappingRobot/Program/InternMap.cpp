@@ -16,10 +16,10 @@ void internMapUpdate() {
 
     //Empties all the pixels between the robot and the hit point
     for(int i = 0; i < hitDistance; i++) {
-        setValue(map, round(currentPixel.x), round(currentPixel.y), 0);
+        setValue(map, round(currentPixel->x), round(currentPixel->y), 0);
         vectorAdd(currentPixel, wallDir);
     }
 
     //Fills the pixel at the hit point
-    setValue(map, round(currentPixel.x), round(currentPixel.y), 1);
+    setValue(map, round(currentPixel->x), round(currentPixel->y), 1);
 }

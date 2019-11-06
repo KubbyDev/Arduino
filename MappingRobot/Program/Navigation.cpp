@@ -4,14 +4,15 @@
 #include "Tools/Vector.h"
 
 #include <math.h>
+#define PI 3.14159265359f
 
 float clampAngle(float* angle) {
-    *angle = *angle % (2*PI);
+    *angle = fmodf(*angle, 2*PI);
     if(*angle < 0)
         *angle += (2*PI);
 }
 
-void getMovementInputs(Vector* target, float* forwardInput, float* turnInput) {
+void getMovementInput(Vector* target, float* forwardInput, float* turnInput) {
 
     // Calculates the needed turn input to reach the target
     float targetAngle = atan2(target->y - position->y, 
