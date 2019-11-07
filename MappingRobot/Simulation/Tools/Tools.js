@@ -45,3 +45,11 @@ function clampAngle(angle) {
         angle += 360;
     return angle;
 }
+
+function inBoundsLowRes(x, y) {
+    return x >= 0 && y >= 0 && x < ControlAlgorithm.LOWRESMAP_SIZE && y < ControlAlgorithm.LOWRESMAP_SIZE;
+}
+
+function inBoundsReal(x, y) {
+    return x >= 0 && y >= 0 && x < ControlAlgorithm.INTERNMAP_SIZE && y < ControlAlgorithm.INTERNMAP_SIZE;
+}

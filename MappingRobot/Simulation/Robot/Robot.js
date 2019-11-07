@@ -1,7 +1,7 @@
 class Robot extends SceneObject {
 
-    static SPEED = 50;
-    static TURNRATE = 50;
+    static SPEED = 80;
+    static TURNRATE = 80;
     sonar;
 
     ctrlAlgoTime = 0; //The time left to update the control algorithm
@@ -72,14 +72,8 @@ class Robot extends SceneObject {
                 if (matrix.getValue(x, y))
                     ctx.fillRect(offsetX + (x*6), offsetY + (y*6), 6, 6);
 
-        //Sets every pixel in the targetPositions to green
-        ctx.fillStyle = "#2bbe3a";
-        for (let position of this.controlAlgorithm.targetPositions)
-            ctx.fillRect(offsetX + (position.x*6) -2, offsetY + (position.y*6) -2, 8, 8);
-
         //Draws the robot
-        ctx.fillStyle = "#ff0938";
-        ctx.fillRect(offsetX + (robotPosition.x)*6 +2 -5, offsetY + (robotPosition.y)*6 +2 -5, 10, 10);
+        drawSquare(robotPosition.add(new Vector(0.5,0.5)).multiply(6).add(new Vector(offsetX, offsetY)), 5, "#ff0938");
 
         //Draws the lowResMap of the control algorithm
 
@@ -91,12 +85,20 @@ class Robot extends SceneObject {
         ctx.fillStyle = "#CCCCCC";
         ctx.fillRect(offsetX, offsetY, ControlAlgorithm.LOWRESMAP_SIZE*16, ControlAlgorithm.LOWRESMAP_SIZE*16);
 
-        //Sets every pixel where there is something to black
-        ctx.fillStyle = "#000000";
-        for (let y = 0; y < ControlAlgorithm.LOWRESMAP_SIZE; y++)
-            for (let x = 0; x < ControlAlgorithm.LOWRESMAP_SIZE; x++)
-                if (matrix[y*ControlAlgorithm.LOWRESMAP_SIZE + x] === 255)
-                    ctx.fillRect(offsetX + (x*16), offsetY + (y*16), 16, 16);
+        //Draws each pixel
+        for (let y = 0; y < ControlAlgorithm.LOWRESMAP_SIZE; y++) {
+            for (let x = 0; x < ControlAlgorithm.LOWRESMAP_SIZE; x++) {
+                let value = matrix[y*ControlAlgorithm.LOWRESMAP_SIZE + x];
+                //Displays the value
+                ctx.fillStyle = "#888888";
+                ctx.fillText(value, offsetX + (x * 16), offsetY + (y * 16)+12);
+                //Background
+                if (value === 255) {
+                    ctx.fillStyle = "#000000";
+                    ctx.fillRect(offsetX + (x * 16), offsetY + (y * 16), 16, 16);
+                }
+            }
+        }
     }
 
     moveForward(enginePower, deltaTime) {
