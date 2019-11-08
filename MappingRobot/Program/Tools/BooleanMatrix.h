@@ -3,18 +3,19 @@
 
 typedef struct BooleanMatrix BooleanMatrix;
 
-BooleanMatrix* newMatrix(unsigned int sizeX, unsigned int sizeY);
-void destroyMatrix(BooleanMatrix* matrix);
+BooleanMatrix* bm_new(unsigned int sizeX, unsigned int sizeY);
+void bm_destroy(BooleanMatrix* matrix);
 
 // Getters
-int getValue(BooleanMatrix* matrix, unsigned int x, unsigned int y);
-unsigned int getSizeX(BooleanMatrix* matrix);
-unsigned int getSizeY(BooleanMatrix* matrix);
-unsigned char getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y);
+int bm_get(BooleanMatrix* matrix, unsigned int x, unsigned int y);
+unsigned int bm_sizeX(BooleanMatrix* matrix);
+unsigned int bm_sizeY(BooleanMatrix* matrix);
+unsigned char bm_getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y);
+int bm_inBounds(BooleanMatrix* matrix, unsigned int x, unsigned int y);
 
 //Setters
-void setValue(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanValue);
-void clear(BooleanMatrix* matrix);
-void fill(BooleanMatrix* matrix, int booleanValue);
+void bm_set(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanValue);
+void bm_clear(BooleanMatrix* matrix);
+void bm_fill(BooleanMatrix* matrix, int booleanValue);
 
 #endif //BOOLEANMATRIX_H

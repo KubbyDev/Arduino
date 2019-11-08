@@ -2,7 +2,6 @@
 
 #define TRIGGER_PIN 2
 #define ECHO_PIN 4
-#define MEASURE_TIMEOUT 23500   // 23.5 ms = 4m round trip
 #define SOUND_SPEED 0.03403f    // in cm/us
 
 unsigned long lastTriggerTime = micros();
@@ -28,9 +27,10 @@ void loop() {
   digitalWrite(TRIGGER_PIN, LOW);
 
   // Starts the measure of the travel time in microseconds
+  Serial.write("Start measure");
   lastTriggerTime = micros();
-
-  delay(100);
+  
+  delay(25); // 23.5 ms = 4m round trip
 }
 
 void printDistance() {
