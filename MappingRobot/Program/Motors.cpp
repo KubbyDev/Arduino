@@ -1,3 +1,8 @@
+#include "Motors.h"
+
+#include <Arduino.h>
+#include <stdlib.h>
+
 #define IN1  7   //K1、K2 motor direction
 #define IN2  8     //K1、K2 motor direction
 #define IN3  9    //K3、K4 motor direction
@@ -26,7 +31,7 @@ void setSpeed(int leftSpeed, int rightSpeed) {
   digitalWrite(IN4, rightSpeed < 0);
 }
 
-void init() {
+void initMotors() {
   
   pinMode(IN1, OUTPUT); 
   pinMode(IN2, OUTPUT); 

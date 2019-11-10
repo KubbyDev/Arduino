@@ -17,7 +17,7 @@ function findPath(controlAlgo) {
             if(get(x, y) !== 255)
                 set(x, y, 254);
 
-    const target = controlAlgo.target.divide(ControlAlgorithm.LOWRESMAP_SIZERATIO).round();
+    const target = controlAlgo.target.divide(ControlAlgorithm.LOWRESMAP_SIZERATIO).applyFunc(Math.floor);
     set(target.x, target.y, 0);
 
     //List of all possible movements

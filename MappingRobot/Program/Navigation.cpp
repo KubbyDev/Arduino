@@ -1,9 +1,16 @@
 #include "Navigation.h"
+#include "Pathfinding.h"
+#include "InternMap.h"
 #include "Data.h"
-#include "IO/Sonar.h"
-#include "Tools/Vector.h"
+#include "Vector.h"
+#include "UCharMatrix.h"
+#include "BooleanMatrix.h"
+#include "Sonar.h"
 
+#include <Arduino.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define PI 3.14159265359f
 
 float clampAngle(float* angle) {
@@ -19,7 +26,7 @@ void getMovementInput(Vector* target, float* forwardInput, float* turnInput) {
                               target->x - position->x);
     clampAngle(&targetAngle);
     
-    float angleDiff = abs(targetAngle - rotation);
+    float angleDiff = fabsf(targetAngle - rotation);
 
     //If the angle difference is too small, doesn't turn
     if(angleDiff > 2 *PI/180) {
@@ -36,22 +43,47 @@ void getMovementInput(Vector* target, float* forwardInput, float* turnInput) {
     }
 }
 
+//Gets the position next "checkpoint" to get to the target
+Vector* getNextPosition() {
+
+    //List of all possible movements
+    //Diagonals are at the end so straight lines are prefered
+    int offsets[] = {1,0, 0,1, -1,0, 0,-1, 1,1, -1,1, -1,-1, 1,-1};
+
+    //Gets the tile with the smallest distance from the target
+    Vector* pos = newVector(roundf(position->x/3), roundf(position->y/3));
+    int minIndex = 0;
+    unsigned char min = 255;
+    for(int i = 0; i < 8; i++) {
+        int newX = pos->x + offsets[2*i];
+        int newY = pos->y + offsets[2*i +1];
+        if(inMatrixBounds(lowResMap, newX, newY) && (getMatrixValue(lowResMap, newX, newY) < min)) {
+            min = getMatrixValue(lowResMap, newX, newY);
+            minIndex = i;
+        }
+    }
+        
+    vectorAdd(pos, newVector(offsets[2*minIndex], offsets[2*minIndex +1]));
+    vectorMult(pos, 3);
+
+    free(offsets);
+    
+    return pos;
+}
+
 void navigationUpdate() {
 
     //Gets the time between this update and the previous one (seconds)
-    float deltaTime = 1;              //TODO ! 
-
-    //Sets the value in lastDistance
-    sonarUpdate();
-
-    //Pathfinding update
-    Vector* targetPosition = newVector(0,0);
+    float deltaTime = (float) (micros() - lastUpdateTime) * 1e-6; 
+    lastUpdateTime = micros();
 
     //Calculates the turnInput and the forwardInput to go to targetPosition
     forwardInput = 0;
     turnInput = 0;
+    Vector* targetPosition = getNextPosition();
     if(targetPosition != NULL)
         getMovementInput(targetPosition, &forwardInput, &turnInput);
+    free(targetPosition);
 
     //Updates the position and rotation of the robot on the map
     float speed = forwardInput * robotSpeed/pixelLength * deltaTime;
@@ -60,6 +92,11 @@ void navigationUpdate() {
     rotation += turnInput * robotTurnRate * deltaTime;
     clampAngle(&rotation);
 
-    //Updates the map according to the data of the sonar
+    //Updates the internMap and the lowResMap according to the data of the sonar
+    //Updates needsPathUpdate if necessary
     internMapUpdate();
+
+    //Updates the path if necessary
+    if(needsPathUpdate)
+        findPath();
 }

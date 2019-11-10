@@ -46,7 +46,7 @@ void setMatrixValue(UCharMatrix* matrix, unsigned int x, unsigned int y, unsigne
 }
 
 /** Fills the matrix with 0 */
-void clearMatrix(UCharMatrix* matrix) { fill(matrix, 0); }
+void clearMatrix(UCharMatrix* matrix) { fillMatrix(matrix, 0); }
 
 /** Fills the matrix with the desired value */
 void fillMatrix(UCharMatrix* matrix, unsigned char value) {

@@ -100,7 +100,7 @@ void bm_set(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanVa
 }
 
 /** Fills the matrix with 0 (false) */
-void bm_clear(BooleanMatrix* matrix) { fill(matrix, 0); }
+void bm_clear(BooleanMatrix* matrix) { bm_fill(matrix, 0); }
 
 /** Fills the matrix with the desired value (0 -> false, != 0 -> true) */
 void bm_fill(BooleanMatrix* matrix, int booleanValue) {
