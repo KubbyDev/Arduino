@@ -1,6 +1,7 @@
 #ifndef SONAR_H
 #define SONAR_H
 
-void sonarUpdate();
+void initSonar();
+void updateSonar();
 
 #endif //SONAR_H

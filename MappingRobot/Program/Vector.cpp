@@ -12,6 +12,11 @@ Vector* newVector(float x, float y) {
     return vec;
 }
 
+void vectorSet(Vector* vec, float x, float y) {
+    vec->x = x;
+    vec->y = y;
+}
+
 void vectorAdd(Vector* destination, Vector* other) {
     destination->x += other->x;
     destination->y += other->y;

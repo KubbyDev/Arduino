@@ -21,21 +21,25 @@ float clampAngle(float* angle) {
 
 void getMovementInput(Vector* target, float* forwardInput, float* turnInput) {
 
+    *forwardInput = 0;
+    *turnInput = 0;
+
     // Calculates the needed turn input to reach the target
     float targetAngle = atan2(target->y - position->y, 
                               target->x - position->x);
+                              
     clampAngle(&targetAngle);
     
     float angleDiff = fabsf(targetAngle - rotation);
 
     //If the angle difference is too small, doesn't turn
-    if(angleDiff > 2 *PI/180) {
+    if(angleDiff > 0.5f) {
 
         //Avoids making a turn of more than 180 degrees
         if(targetAngle - rotation > PI) targetAngle -= 2*PI;
         if(targetAngle - rotation < -PI) targetAngle += 2*PI;
 
-        *turnInput = (targetAngle > rotation) ? -1 : 1;
+        *turnInput = (targetAngle > rotation) ? 1 : -1;
     }
     //If no big turn is needed, can go forward
     else {
@@ -62,27 +66,25 @@ Vector* getNextPosition() {
             minIndex = i;
         }
     }
-        
-    vectorAdd(pos, newVector(offsets[2*minIndex], offsets[2*minIndex +1]));
-    vectorMult(pos, 3);
 
-    free(offsets);
+    Vector* selectedOffset = newVector(offsets[2*minIndex], offsets[2*minIndex +1]);
+    vectorAdd(pos, selectedOffset);
+    vectorMult(pos, 3);
+    free(selectedOffset);
     
     return pos;
 }
 
 void navigationUpdate() {
-
+    
     //Gets the time between this update and the previous one (seconds)
     float deltaTime = (float) (micros() - lastUpdateTime) * 1e-6; 
     lastUpdateTime = micros();
-
+    
     //Calculates the turnInput and the forwardInput to go to targetPosition
-    forwardInput = 0;
-    turnInput = 0;
-    Vector* targetPosition = getNextPosition();
+    Vector* targetPosition = getNextPosition();    
     if(targetPosition != NULL)
-        getMovementInput(targetPosition, &forwardInput, &turnInput);
+        getMovementInput(targetPosition, &forwardInput, &turnInput);    
     free(targetPosition);
 
     //Updates the position and rotation of the robot on the map
@@ -91,12 +93,12 @@ void navigationUpdate() {
     position->y += sin(rotation) * speed;
     rotation += turnInput * robotTurnRate * deltaTime;
     clampAngle(&rotation);
+    
+    //Updates the path if necessary
+    if(needsPathUpdate)
+        findPath();
 
     //Updates the internMap and the lowResMap according to the data of the sonar
     //Updates needsPathUpdate if necessary
     internMapUpdate();
-
-    //Updates the path if necessary
-    if(needsPathUpdate)
-        findPath();
 }

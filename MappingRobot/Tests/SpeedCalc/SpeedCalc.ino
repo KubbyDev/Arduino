@@ -34,19 +34,19 @@ void setSpeed(int leftSpeed, int rightSpeed) {
 // in the cardboard robot and bad cabling
 
 void forward() {
-  setSpeed(-252, 255);
+  setSpeed(-255, -255);
 }
 
 void backward() {
-  setSpeed(252, -255);
+  setSpeed(255, 255);
 }
 
 void turnLeft() {
-  setSpeed(-255,-255);
+  setSpeed(-255,255);
 }
 
 void turnRight() {
-  setSpeed(255,255);
+  setSpeed(255,-255);
 }
 
 // Test function --------------------------------------------
@@ -64,19 +64,19 @@ void setup() {
   setSpeed(0,0);
   delay(1000);
   forward();
-  delay(4000);
+  delay(1000);
   setSpeed(0,0);
   delay(1000);
   backward();
-  delay(4000);
+  delay(1000);
   setSpeed(0,0);
-  delay(10000);
+  delay(1000);
   turnLeft();
-  delay(10000);
+  delay(1000);
   setSpeed(0,0);
   delay(1000);
   turnRight();
-  delay(10000);
+  delay(1000);
   setSpeed(0,0);
 }
 

@@ -146,4 +146,7 @@ void internMapUpdate() {
 
     //Fills the pixel at the hit point
     bm_set(internMap, round(currentPixel->x), round(currentPixel->y), 1);
+
+    free(wallDir);
+    free(currentPixel);
 }
