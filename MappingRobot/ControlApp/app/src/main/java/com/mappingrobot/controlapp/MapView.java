@@ -18,15 +18,20 @@ public class MapView extends SurfaceView {
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         surfaceHolder = getHolder();
-        drawMap();
     }
 
-    public void drawMap() {
+    public void updateDisplay() {
 
         Canvas canvas = surfaceHolder.lockCanvas();
 
-        paint.setColor(Color.argb(255, (int)(Math.random()*255), 0, 0));
-        canvas.drawRect(0,0,672,672,paint);
+        paint.setColor(Color.argb(255, 127, 127, 127));
+        canvas.drawRect(0,0,RobotMap.SIZE*9,RobotMap.SIZE*9,paint);
+
+        paint.setColor(Color.argb(255, 0, 0, 0));
+        for(int y = 0; y < RobotMap.SIZE; y++)
+            for(int x = 0; x < RobotMap.SIZE; x++)
+                if(RobotMap.get(x, y))
+                    canvas.drawRect(x*9, y*9, x*9+9, y*9+9, paint);
 
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
