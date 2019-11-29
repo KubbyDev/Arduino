@@ -34,7 +34,7 @@ void loop() {
 
   if (client) { // Un client est là ?
 
-    char *url = (char *)malloc(100); //L'url recue (remplie au fur et a mesure)
+    char *url = (char *)malloc(100); // la requette recue
     int index = 0;
 
     while (client.connected()) {
@@ -43,10 +43,7 @@ void loop() {
 
         char newChar = client.read();
         if (newChar == '\n' || index > 100) { //Si on a fini la lecture on fait le traitement
-
-          digitalWrite(3, readRequest(url));
-          respond(client);
-          
+          respond(client, url);          
           break; //On sort du while
         }
         else { //Sinon on continue la lecture
@@ -62,17 +59,7 @@ void loop() {
   }
 }
 
-boolean readRequest(char request[]) {
-
-  int i = 0;
-  while (! (request[i] == 'b' && request[i + 1] == '=')) //Tant qu'on est pas arrive a b=
-    i += 1;
-
-  //Une fois qu'on est a b=, on regarde ce qu'il y a juste apres
-  return request[i + 2] == '3';
-}
-
-void respond(EthernetClient client) {
+void respond(EthernetClient client, char* request) {
 
   //Header
   client.println("HTTP/1.1 200 OK");
@@ -81,15 +68,5 @@ void respond(EthernetClient client) {
   client.println();
 
   //Body
-  client.println("{");
-  
-  client.print("\t\"uptime\": ");
-  client.print(millis());
-  
-  client.println(",");
-
-  client.print("\t\"3\": ");
-  client.print(digitalRead(3));
-  
-  client.println("}");
+  client.prinln("test");
 }
