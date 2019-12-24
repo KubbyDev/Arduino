@@ -24,6 +24,9 @@ public class MapView extends SurfaceView {
 
         Canvas canvas = surfaceHolder.lockCanvas();
 
+        if(canvas == null)
+            return;
+
         paint.setColor(Color.argb(255, 127, 127, 127));
         canvas.drawRect(0,0,RobotMap.SIZE*9,RobotMap.SIZE*9,paint);
 

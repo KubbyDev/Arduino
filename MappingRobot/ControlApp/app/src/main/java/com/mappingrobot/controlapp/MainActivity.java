@@ -9,19 +9,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RobotMap.fill(false);
-        RobotMap.set(0,0,true);
-        RobotMap.set(2,2,true);
-        RobotMap.set(50,42,true);
-        RobotMap.set(71,71,true);
+        Network.init(this);
+
+        // Starts a thread that calls update() every 200 milliseconds (2 seconds after startup)
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
+                while(true) {
+                    update();
+                    try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
+                }
+            }
+        }).start();
     }
 
     public void onClick(View view) {
 
+    }
 
+    public void update() {
+        RobotMap.requestNextChunk();
         ((MapView)findViewById(R.id.mapview)).updateDisplay();
     }
 }

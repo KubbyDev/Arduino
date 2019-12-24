@@ -23,9 +23,13 @@ void setup() {
 
     // Initialises the communication with the ESP8266
     initCommunication();
+
+    Serial.begin(9600);
 }
 
 void loop() {
+
+    //Serial.println("---- Loop ----");
 
     // Updates the communication with the ESP8266
     // (Retrives or sends information to the user if necessary)

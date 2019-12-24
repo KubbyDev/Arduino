@@ -10,9 +10,6 @@ ESP8266WebServer server(80);
 
 #define SERIAL Serial
 
-/* Just a little test message.  Go to the IP address you setup below in a web browser
-   connected to this access point to see it.
-*/
 void handleRoot() {
   server.send(200, "text/html", "<h1>You are connected</h1>");
 }
