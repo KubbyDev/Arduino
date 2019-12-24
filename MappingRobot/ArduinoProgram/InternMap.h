@@ -1,6 +1,6 @@
 #ifndef INTERNMAP_H
 #define INTERNMAP_H
 
-void internMapUpdate();
+void updateInternMap();
 
 #endif //INTERNMAP_H

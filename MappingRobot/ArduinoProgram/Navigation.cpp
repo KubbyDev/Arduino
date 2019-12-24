@@ -11,9 +11,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define PI 3.14159265359f
 
-float clampAngle(float* angle) {
+void clampAngle(float* angle) {
     *angle = fmodf(*angle, 2*PI);
     if(*angle < 0)
         *angle += (2*PI);
@@ -75,7 +74,7 @@ Vector* getNextPosition() {
     return pos;
 }
 
-void navigationUpdate() {
+void updateNavigation() {
     
     //Gets the time between this update and the previous one (seconds)
     float deltaTime = (float) (micros() - lastUpdateTime) * 1e-6; 
@@ -100,5 +99,5 @@ void navigationUpdate() {
 
     //Updates the internMap and the lowResMap according to the data of the sonar
     //Updates needsPathUpdate if necessary
-    internMapUpdate();
+    updateInternMap();
 }

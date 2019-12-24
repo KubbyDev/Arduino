@@ -1,4 +1,3 @@
-
 #include "InternMap.h"
 #include "Data.h"
 #include "Vector.h"
@@ -131,7 +130,7 @@ void turnPixelOff(unsigned int x, unsigned int y) {
 
 //Updates the internMap according to the position, the rotation
 //and the last distance calculated
-void internMapUpdate() {
+void updateInternMap() {
 
     Vector* wallDir = vectorfromRot(rotation);
     float hitDistance = lastDistance / pixelLength; //In internMap units

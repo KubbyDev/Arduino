@@ -35,7 +35,7 @@ unsigned char getMatrixValue(UCharMatrix* matrix, unsigned int x, unsigned int y
 
 /** Returns 1 if the given coordinates are in the matrix bounds, 0 otherwise */
 int inMatrixBounds(UCharMatrix* matrix, unsigned int x, unsigned int y) {
-    return x >= 0 && y >= 0 && x < matrix->sizeX && y < matrix->sizeY;
+    return x < matrix->sizeX && y < matrix->sizeY;
 }
 
 // Setters ---------------------------------------------------------------------
