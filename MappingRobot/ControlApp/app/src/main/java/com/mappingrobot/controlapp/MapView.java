@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -35,6 +36,17 @@ public class MapView extends SurfaceView {
             for(int x = 0; x < RobotMap.SIZE; x++)
                 if(RobotMap.get(x, y))
                     canvas.drawRect(x*9, y*9, x*9+9, y*9+9, paint);
+
+        // Draws the robot
+        paint.setColor(Color.argb(255, 255, 0, 0));
+        float[][] points = RobotTransform.getPoints();
+        Path path = new Path();
+        path.setFillType(Path.FillType.EVEN_ODD);
+        path.moveTo(points[0][0], points[0][1]);
+        path.lineTo(points[1][0], points[1][1]);
+        path.lineTo(points[2][0], points[2][1]);
+        path.close();
+        canvas.drawPath(path, paint);
 
         surfaceHolder.unlockCanvasAndPost(canvas);
     }

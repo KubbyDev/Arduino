@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define IN1  7   //K1、K2 motor direction
-#define IN2  8     //K1、K2 motor direction
+#define IN1  7    //K1、K2 motor direction
+#define IN2  8    //K1、K2 motor direction
 #define IN3  9    //K3、K4 motor direction
 #define IN4  10   //K3、K4 motor direction
-#define ENA  5    // Needs to be a PWM pin to be able to control motor speed ENA
-#define ENB  6    // Needs to be a PWM pin to be able to control motor speed ENA
+#define ENA  5    // Needs to be a PWM pin to be able to control motor speed
+#define ENB  6    // Needs to be a PWM pin to be able to control motor speed
 
 // Speed control ------------------------------------------
 

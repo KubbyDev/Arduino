@@ -48,12 +48,39 @@ public class Network {
 
         String url = ESP_SERVER_URL + "/set_target?x=" + x + "&y=" + y + "\n";
 
+        System.out.println("Sent request " + url);
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         System.out.println(response);
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    /** Requests the position and rotation of the robot */
+    public static void requestPosition() {
+
+        String url = ESP_SERVER_URL + "/position\n";
+
+        System.out.println("Sent request " + url);
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println(response);
+                        RobotTransform.update(response);
                     }
                 }, new com.android.volley.Response.ErrorListener() {
                     @Override

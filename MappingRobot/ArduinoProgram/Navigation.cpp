@@ -99,5 +99,6 @@ void updateNavigation() {
 
     //Updates the internMap and the lowResMap according to the data of the sonar
     //Updates needsPathUpdate if necessary
-    updateInternMap();
+    
+    //updateInternMap();   //TODO UNCOMMENT ----------------------------------------
 }

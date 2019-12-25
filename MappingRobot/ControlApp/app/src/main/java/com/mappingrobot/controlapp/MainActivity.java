@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void update() {
         RobotMap.requestNextChunk();
+        RobotTransform.request();
         ((MapView)findViewById(R.id.mapview)).updateDisplay();
     }
 }

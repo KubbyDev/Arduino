@@ -27,28 +27,46 @@ int readIntFromSerial(char endCharacter) {
 // A chunk contains the data for lines 3*index to 3*(index+1)-1
 void sendMapChunkToEsp(int chunkIndex) {
 
-    Serial.print("Received chunk request ");Serial.print(chunkIndex);Serial.print("\n");
-
-    char* chunk = (char*) malloc(sizeof(char)*3*9*3 + 2);
+    char* chunk = (char*) malloc(sizeof(char)*3*9*3 +1);
     int firstByte = chunkIndex*9*3;
     for(int i = 0; i < 3*9; i++) {
         unsigned char uc = bm_getByte(internMap, i + firstByte);
+        //Serial.print(uc);
         chunk[i*3 +0] = '0' + uc/100;
         chunk[i*3 +1] = '0' + (uc%100)/10;
         chunk[i*3 +2] = '0' + uc%10;
     }
 
     chunk[3*9*3] = '\n';
-    chunk[3*9*3+1] = 0;
     SERIALOBJECT.write(chunk, 3*9*3+1);
-
-    Serial.print("Responded ");Serial.print(chunk);
-
     free(chunk);
 }
 
+// Sends the position and the rotation of the robot to the ESP8266
+void sendPositionToEsp() {
+
+    char* response = (char*) malloc(sizeof(char)*(3*15 +3));
+    char* buffer = response;
+
+    dtostrf(position->x, 15, 3, buffer);
+    buffer += 15;
+    buffer[0] = ';';
+    buffer++;
+    dtostrf(position->y, 15, 3, buffer);
+    buffer += 15;
+    buffer[0] = ';';
+    buffer++;
+    dtostrf(rotation, 15, 3, buffer);
+    buffer += 15;
+    buffer[0] = '\n';
+    buffer += 2;
+    
+    SERIALOBJECT.write(response, 3*15+3);
+    free(response);
+}
+
 void initCommunication() {
-    SERIALOBJECT.begin(57600);
+    SERIALOBJECT.begin(250000);
 }
 
 void updateCommunication() {
@@ -61,12 +79,23 @@ void updateCommunication() {
     delay(10);
 
     char commandType = SERIALOBJECT.read();
+    //Serial.print("Got a message");Serial.println(commandType);
     // If a new target position is received, updates it
     // Target position update commands are of this form: T<POSX>,<POSY>\n
-    if(commandType == 'T')
-        vectorSet(target, readIntFromSerial(','), readIntFromSerial('\n'));
+    if(commandType == 'T') {
+        int x = readIntFromSerial(',');
+        int y = readIntFromSerial('\n');
+        vectorSet(target, x, y);
+        //Serial.print("New Target: ");Serial.print(target->x);Serial.print(", ");Serial.print(target->y);Serial.println();
+    }
     // If a map chunk is requested, sends it
     // Map chunk requests are of this form: M<CHUNKINDEX>\n
     if(commandType == 'M')
         sendMapChunkToEsp(readIntFromSerial('\n'));
+    // If the position is requested, sends it
+    // Position requests are of this form: P\n
+    if(commandType == 'P') {
+        sendPositionToEsp();
+        SERIALOBJECT.read(); // Consumes the '\n'    
+    }
 }
