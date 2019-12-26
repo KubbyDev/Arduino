@@ -17,7 +17,7 @@ void findPath() {
 
     //Sets the targets distance to the target to 0
     Vector* targetPosition = vectorCopy(target);
-    vectorMult(targetPosition, 0.33333f);
+    vectorMult(targetPosition, (float)LOWRES_SIZE/MAP_SIZE);
     setMatrixValue(lowResMap, targetPosition->x, targetPosition->y, 0);
     free(targetPosition);
 

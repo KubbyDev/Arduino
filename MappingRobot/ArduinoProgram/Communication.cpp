@@ -86,6 +86,7 @@ void updateCommunication() {
         int x = readIntFromSerial(',');
         int y = readIntFromSerial('\n');
         vectorSet(target, x, y);
+        needsPathUpdate = 1;
         //Serial.print("New Target: ");Serial.print(target->x);Serial.print(", ");Serial.print(target->y);Serial.println();
     }
     // If a map chunk is requested, sends it

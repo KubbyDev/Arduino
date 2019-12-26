@@ -18,15 +18,27 @@ void clampAngle(float* angle) {
         *angle += (2*PI);
 }
 
-void getMovementInput(Vector* target, float* forwardInput, float* turnInput) {
+void getMovementInput(Vector* targetPos, float* forwardInput, float* turnInput) {
 
     *forwardInput = 0;
     *turnInput = 0;
 
     // Calculates the needed turn input to reach the target
-    float targetAngle = atan2(target->y - position->y, 
-                              target->x - position->x);
-                              
+    float targetAngle = atan2(targetPos->y - position->y, 
+                              targetPos->x - position->x);
+
+    /*
+    Serial.println("-------------------------");
+    Serial.print("PosX: ");Serial.println(position->x);    
+    Serial.print("PosY: ");Serial.println(position->y);
+    Serial.print("TargetX: ");Serial.println(target->x);    
+    Serial.print("TargetY: ");Serial.println(target->y);
+    Serial.print("DeltaX: ");Serial.println(targetPos->x - position->x);    
+    Serial.print("DeltaY: ");Serial.println(targetPos->y - position->y);
+    Serial.print("Current angle: ");Serial.println(rotation);
+    Serial.print("Target angle: ");Serial.println(targetAngle);
+    */
+    
     clampAngle(&targetAngle);
     
     float angleDiff = fabsf(targetAngle - rotation);
@@ -99,6 +111,5 @@ void updateNavigation() {
 
     //Updates the internMap and the lowResMap according to the data of the sonar
     //Updates needsPathUpdate if necessary
-    
-    //updateInternMap();   //TODO UNCOMMENT ----------------------------------------
+    updateInternMap();
 }

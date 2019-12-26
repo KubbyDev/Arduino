@@ -47,6 +47,13 @@ public class MapView extends SurfaceView {
         path.lineTo(points[2][0], points[2][1]);
         path.close();
         canvas.drawPath(path, paint);
+        /*
+        paint.setColor(Color.argb(255, 255, 255, 255));
+        canvas.drawRect(points[0][0]-2, points[0][1]-2,
+                points[0][0]+2, points[0][1]+2, paint);
+        canvas.drawRect((int)RobotTransform.x*9-2, (int)RobotTransform.y*9-2,
+                (int)RobotTransform.x*9+2, (int)RobotTransform.y*9+2, paint);
+        */
 
         surfaceHolder.unlockCanvasAndPost(canvas);
     }

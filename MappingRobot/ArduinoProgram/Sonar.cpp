@@ -4,8 +4,10 @@
 #include <Arduino.h>
 #include <PinChangeInterrupt.h> //PinChangeInterrupt by NicoHood v1.2.6
 
-#define TRIGGER_PIN 2
-#define ECHO_PIN 4
+//Powering: 5V. Warning, the echo pin must be a PCINT pin
+#define TRIGGER_PIN 10
+#define ECHO_PIN 12
+
 #define SOUND_SPEED 0.03403f    // in cm/us
 
 unsigned long lastTriggerTime = micros();
@@ -40,6 +42,9 @@ void onEchoReceived() {
     // Saves the calculated distance if it is relevant (some measures are wrong)
     if(distance > 0.1f)
         lastDistance = distance;
+
+    //Serial.print("Sonar (cm): ");
+    //Serial.println(distance);
 }
 
 void initSonar() {
