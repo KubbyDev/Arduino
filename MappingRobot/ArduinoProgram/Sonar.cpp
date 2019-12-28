@@ -19,7 +19,7 @@ void updateSonar() {
     if(micros() - lastTriggerTime < 25000)
         return;
 
-    lastDistance = (micros()/100000)%100;
+    //lastDistance = (micros()/100000)%100;
 
     // Sends a 10 ms pulse
     digitalWrite(TRIGGER_PIN, LOW);
@@ -55,5 +55,5 @@ void initSonar() {
     digitalWrite(TRIGGER_PIN, LOW);
     pinMode(ECHO_PIN, INPUT);
 
-    //attachPCINT(digitalPinToPCINT(ECHO_PIN), onEchoReceived, FALLING);
+    attachPCINT(digitalPinToPCINT(ECHO_PIN), onEchoReceived, FALLING);
 }

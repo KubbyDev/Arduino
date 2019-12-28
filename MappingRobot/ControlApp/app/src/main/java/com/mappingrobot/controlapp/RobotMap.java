@@ -21,7 +21,7 @@ public class RobotMap {
     }
 
     public static void requestNextChunk() {
-        Network.requestMapChunk(12);
+        Network.requestMapChunk(nextChunkIndex);
         nextChunkIndex = (nextChunkIndex+1)%24;
     }
 

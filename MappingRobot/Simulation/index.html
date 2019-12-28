@@ -64,6 +64,17 @@
         drawScene();
     }, 20);
 
+    let dir = 1;
+    setInterval(() => {
+        sceneobject.position.x += dir * 1;
+        sceneobject.areCornersCorrect = false;
+        if(sceneobject.position.x > 300 || sceneobject.position.x < 100)
+            dir *= -1;
+    }, 20);
+
+    objects[2].position = new Vector(50, 200);
+    objects[2].areCornersCorrect = false;
+
 </script>
 
 </body>

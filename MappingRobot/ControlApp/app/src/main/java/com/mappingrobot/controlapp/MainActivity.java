@@ -3,6 +3,7 @@ package com.mappingrobot.controlapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,18 +21,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
-                while(true) {
+                while (true) {
                     RobotMap.requestNextChunk();
                     try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
                     RobotTransform.request();
                     try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
-                    ((MapView)findViewById(R.id.mapview)).updateDisplay();
+                    ((MapView) findViewById(R.id.mapview)).updateDisplay();
                 }
             }
         }).start();
-    }
 
-    public void onClick(View view) {
-
+        View view = findViewById(R.id.mapview);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getActionMasked() != MotionEvent.ACTION_DOWN)
+                    return false;
+                int x = (int)event.getX();
+                int y = (int)event.getY();
+                if(x > 0 && x < RobotMap.SIZE*9 && y > 0 && y < RobotMap.SIZE*9)
+                    Network.requestTargetChange(x/9, y/9);
+                return false;
+            }
+        });
     }
 }

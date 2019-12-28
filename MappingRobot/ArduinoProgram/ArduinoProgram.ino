@@ -67,7 +67,6 @@ void loop() {
                 }
                 Serial.println();
             }
-            Serial.println("\n\n");
         }
     }
 

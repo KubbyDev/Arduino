@@ -43,6 +43,7 @@ class ControlAlgorithm {
             turnInput = inputs[1];
         }
 
+/*
         //The last factors are the turn rate of the robot and its speed multiplied
         //by the size ratio between the intern map and the simulation world.
         //They will have to be determined experimentaly on the real robot
@@ -52,6 +53,7 @@ class ControlAlgorithm {
             * forwardInput * Robot.SPEED/ControlAlgorithm.PIXEL_LENGTH * deltaTime;
         this.expectedRotation += -turnInput * Robot.TURNRATE * deltaTime;
         this.expectedRotation = clampAngle(this.expectedRotation);
+*/
 
         //Updates the map according to the data of the sonar
         //If the path needs to be recalculated, this function will change this.needsPathUpdate

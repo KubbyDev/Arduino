@@ -37,8 +37,8 @@ class Robot extends SceneObject {
         }
         else
             this.ctrlAlgoTime -= deltaTime;
-        this.moveForward(this.lastInput[0], deltaTime);
-        this.turn(this.lastInput[1], deltaTime);
+        //this.moveForward(this.lastInput[0], deltaTime);
+        //this.turn(this.lastInput[1], deltaTime);
 
         //Updates the position of the corners of the robot (and the hitbox at the same time) if necessary
         this.getCorners();

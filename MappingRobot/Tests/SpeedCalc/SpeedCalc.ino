@@ -64,19 +64,19 @@ void setup() {
   setSpeed(0,0);
   delay(1000);
   forward();
-  delay(1000);
+  delay(3000);
   setSpeed(0,0);
   delay(1000);
   backward();
-  delay(1000);
+  delay(3000);
   setSpeed(0,0);
   delay(1000);
   turnLeft();
-  delay(1000);
+  delay(3000);
   setSpeed(0,0);
   delay(1000);
   turnRight();
-  delay(1000);
+  delay(3000);
   setSpeed(0,0);
 }
 

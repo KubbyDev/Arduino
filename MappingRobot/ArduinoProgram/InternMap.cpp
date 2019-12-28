@@ -50,8 +50,10 @@ int isPixelOff(unsigned int x, unsigned int y) {
 void turnPixelOff(unsigned int x, unsigned int y) {
 
     //Stops everything if the pixel is outside the internMap or already OFF
-    if(!bm_inBounds(internMap, x, y) || !bm_get(internMap, x, y))
+    if(!bm_inBounds(internMap, x, y) )//|| !bm_get(internMap, x, y))
         return;
+
+    //Serial.print("Turning OFF ------");Serial.print(x);Serial.print(" ");Serial.println(y);
 
     //Sets the pixel to OFF
     bm_set(internMap, x, y, 0);
@@ -85,22 +87,22 @@ void turnPixelOff(unsigned int x, unsigned int y) {
         toCheck[nbToCheck*2+1] = 1;
         nbToCheck++;
     }
-    if(x % 3 == 0 && y % 3 == 0) { 
+    if((x % 3 == 0) && (y % 3 == 0)) { 
         toCheck[nbToCheck*2] = -1;
         toCheck[nbToCheck*2+1] = -1;
         nbToCheck++;
     }
-    if(x % 3 == 2 && y % 3 == 2) { 
+    if((x % 3 == 2) && (y % 3 == 2)) { 
         toCheck[nbToCheck*2] = 1;
         toCheck[nbToCheck*2+1] = 1;
         nbToCheck++;
     }
-    if(x % 3 == 0 && y % 3 == 2) { 
+    if((x % 3 == 0) && (y % 3 == 2)) { 
         toCheck[nbToCheck*2] = -1;
         toCheck[nbToCheck*2+1] = 1;
         nbToCheck++;
     }
-    if(x % 3 == 2 && y % 3 == 0) { 
+    if((x % 3 == 2) && (y % 3 == 0)) { 
         toCheck[nbToCheck*2] = 1;
         toCheck[nbToCheck*2+1] = -1;
         nbToCheck++;
@@ -112,22 +114,27 @@ void turnPixelOff(unsigned int x, unsigned int y) {
     int i = 0;
     while(i < 8 && toCheck[i] != -10) {
 
-        //Serial.print("Checking ");Serial.println(i/2);
+        //Serial.print("Checking ");Serial.print(i/2);Serial.print(", offset= ");Serial.print(toCheck[i]);Serial.print(" ");Serial.println(toCheck[i+1]);
 
         int lrX = x/3 + toCheck[i];
         int lrY = y/3 + toCheck[i+1];
 
+        //Serial.print("Checking ");Serial.print(lrX);Serial.print(" ");Serial.println(lrY);
+
         // If the pixel is not in the matrix bounds or already off,
         // it will not have to be checked
         if(!inMatrixBounds(lowResMap, lrX, lrY) || (getMatrixValue(lowResMap, lrY, lrX) != 255)) {
+            //Serial.print("not checked ");Serial.println(getMatrixValue(lowResMap, lrY, lrX));
             i += 2;
             continue;
         }
 
         if(isPixelOff(lrX, lrY)) {
+            //Serial.print("SET OFF ");Serial.print(lrX);Serial.print(" ");Serial.println(lrY);
             setMatrixValue(lowResMap, lrX, lrY, 254);
             needsPathUpdate = 1;
         }
+        //else Serial.println("not set off");
 
         i += 2;
     }
@@ -147,15 +154,14 @@ void updateInternMap() {
     //Serial.print("Position: x=");Serial.print(currentPixel->x);Serial.print(",y=");Serial.println(currentPixel->y);
 
     //Empties all the pixels between the robot and the hit point
-    for(int i = 0; i < hitDistance; i++) {
+    for(int i = 0; i <= hitDistance; i++) {
         //Serial.print("Current: x=");Serial.print(currentPixel->x);Serial.print(",y=");Serial.println(currentPixel->y);
         turnPixelOff(round(currentPixel->x), round(currentPixel->y));
         vectorAdd(currentPixel, wallDir);
     }
 
     //Fills the pixel at the hit point
-    free(currentPixel);
-    currentPixel = vectorCopy(position);
+    vectorSet(currentPixel, position->x, position->y);
     vectorMult(wallDir, hitDistance);
     vectorAdd(currentPixel, wallDir);
     turnPixelOn(round(currentPixel->x), round(currentPixel->y));
