@@ -8,11 +8,14 @@
 
 // Reads Serial input until endCharacter is reached, 
 // then returns the int represented by the read input
+// Returns -1 if the number contains more than 3 digits (error)
 int readIntFromSerial(char endCharacter) {
     char* res = (char*) malloc(sizeof(char)*10);
     char next = SERIALOBJECT.read();
     int index = 0;
     while(next != endCharacter) {
+        if(index == 3)
+            return -1;
         res[index] = next;
         index++;
         next = SERIALOBJECT.read();
@@ -21,6 +24,12 @@ int readIntFromSerial(char endCharacter) {
     int result = atoi(res);
     free(res);
     return result;
+}
+
+void readingError() {
+    Serial.println("Error reading int from serial");
+    while(SERIALOBJECT.available())
+        SERIALOBJECT.read();
 }
 
 // Sends a chunk of the intern map to the ESP8266
@@ -85,6 +94,10 @@ void updateCommunication() {
     if(commandType == 'T') {
         int x = readIntFromSerial(',');
         int y = readIntFromSerial('\n');
+        if(x == -1 || y == -1) {
+            readingError();
+            return;
+        }
         vectorSet(target, x, y);
         needsPathUpdate = 1;
         //Serial.print("New Target: ");Serial.print(target->x);Serial.print(", ");Serial.print(target->y);Serial.println();

@@ -6,6 +6,7 @@ ESP8266WebServer server(80);
 const char* ssid = "MappingRobot";
 
 #define SERIALOBJECT Serial
+#define RESPONSE_TIMEOUT 1000
 
 //Checks if the argument is given and is a 1-3 digits positive integer
 int isArgumentCorrect(String argument) {
@@ -18,7 +19,29 @@ int isArgumentCorrect(String argument) {
     return 1;
 }
 
-// Returns the wanted chunk of the intern map
+//Waits for the Arduino to answer to a request
+//Returns 1 if the answer was received, 0 otherwise
+int waitForArduino() {
+    
+    int i = 0;
+    //Waits for the Arduino to start answering
+    while(!SERIALOBJECT.available()) {
+        i++;
+        if(i > RESPONSE_TIMEOUT) {
+            server.send(500, "text/plain", "The ESP recieved the request but the Arduino didn't respond");
+            return 0;  
+        }
+        delay(1);
+    }
+    
+    //Waits for the Arduino to finish writing
+    delay(50);
+    
+    return 1;
+}
+
+// Returns the wanted chunk of the intern map (cells are grouped by 8 and sent as the decimal
+// representation of these 8 bits. So each group is encoded as 3 characters from 0 to 9)
 // Query is of this form: /map_chunk?index=000
 void getMapChunk() { 
 
@@ -32,14 +55,13 @@ void getMapChunk() {
     SERIALOBJECT.write(message.c_str(), message.length());
 
     // Waits for the Arduino to respond
-    while(!SERIALOBJECT.available()) 
-        delay(1);
-    delay(50);
+    if(!waitForArduino())
+        return;
 
     // Reads and sends the response of the Arduino
     String res = "";        
     char next = SERIALOBJECT.read();
-    while(next != '\n') {
+    while(SERIALOBJECT.available() && next != '\n') {
         res += next;
         next = SERIALOBJECT.read();
     }
@@ -67,14 +89,13 @@ void getPosition() {
     SERIALOBJECT.write("P\n", 2);
     
     // Waits for the Arduino to respond
-    while(!SERIALOBJECT.available()) 
-        delay(1);
-    delay(50);
+    if(!waitForArduino())
+        return;
 
     // Reads and sends the response of the Arduino
     String res = "";        
     char next = SERIALOBJECT.read();
-    while(next != '\n') {
+    while(SERIALOBJECT.available() && next != '\n') {
         res += next;
         next = SERIALOBJECT.read();
     }

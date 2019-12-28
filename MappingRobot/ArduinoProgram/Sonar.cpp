@@ -5,7 +5,7 @@
 #include <PinChangeInterrupt.h> //PinChangeInterrupt by NicoHood v1.2.6
 
 //Powering: 5V. Warning, the echo pin must be a PCINT pin
-#define TRIGGER_PIN 10
+#define TRIGGER_PIN 11
 #define ECHO_PIN 12
 
 #define SOUND_SPEED 0.03403f    // in cm/us
@@ -18,6 +18,8 @@ void updateSonar() {
     // 23.5 ms = 4m round trip
     if(micros() - lastTriggerTime < 25000)
         return;
+
+    lastDistance = (micros()/100000)%100;
 
     // Sends a 10 ms pulse
     digitalWrite(TRIGGER_PIN, LOW);
@@ -53,5 +55,5 @@ void initSonar() {
     digitalWrite(TRIGGER_PIN, LOW);
     pinMode(ECHO_PIN, INPUT);
 
-    attachPCINT(digitalPinToPCINT(ECHO_PIN), onEchoReceived, FALLING);
+    //attachPCINT(digitalPinToPCINT(ECHO_PIN), onEchoReceived, FALLING);
 }

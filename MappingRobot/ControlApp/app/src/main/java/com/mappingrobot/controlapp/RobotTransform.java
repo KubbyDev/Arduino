@@ -36,8 +36,8 @@ public class RobotTransform {
 
         //Converts the positions in canvas coordinates
         for(float[] point : res) {
-            point[0] = (float) (point[0] + x)*9-4;
-            point[1] = (float) (point[1] + y)*9-4;
+            point[0] = (float) (point[0] + x)*9;
+            point[1] = (float) (point[1] + y)*9;
         }
 
         return res;

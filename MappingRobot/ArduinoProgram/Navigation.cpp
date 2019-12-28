@@ -100,9 +100,9 @@ void updateNavigation() {
 
     //Updates the position and rotation of the robot on the map
     float speed = forwardInput * robotSpeed/pixelLength * deltaTime;
-    position->x += cos(rotation) * speed;
-    position->y += sin(rotation) * speed;
-    rotation += turnInput * robotTurnRate * deltaTime;
+    //position->x += cos(rotation) * speed;
+    //position->y += sin(rotation) * speed;
+    //rotation += turnInput * robotTurnRate * deltaTime;
     clampAngle(&rotation);
     
     //Updates the path if necessary

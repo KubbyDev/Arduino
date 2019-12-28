@@ -21,8 +21,11 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
                 while(true) {
-                    update();
-                    try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
+                    RobotMap.requestNextChunk();
+                    try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+                    RobotTransform.request();
+                    try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+                    ((MapView)findViewById(R.id.mapview)).updateDisplay();
                 }
             }
         }).start();
@@ -30,11 +33,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
 
-    }
-
-    public void update() {
-        RobotMap.requestNextChunk();
-        RobotTransform.request();
-        ((MapView)findViewById(R.id.mapview)).updateDisplay();
     }
 }

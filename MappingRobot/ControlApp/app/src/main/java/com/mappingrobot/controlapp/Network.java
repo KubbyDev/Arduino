@@ -2,6 +2,7 @@ package com.mappingrobot.controlapp;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -10,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 public class Network {
 
     private static final String ESP_SERVER_URL = "http://192.168.0.20:80";
+    private static final int TIMEOUT = 5000;
     private static RequestQueue queue;
 
     public static void init(Context ctx) {
@@ -38,6 +40,11 @@ public class Network {
                     }
                 }
         );
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -63,6 +70,11 @@ public class Network {
                     }
                 }
         );
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -89,6 +101,11 @@ public class Network {
                     }
                 }
         );
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);

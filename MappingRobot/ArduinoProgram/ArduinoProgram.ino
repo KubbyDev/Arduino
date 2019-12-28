@@ -25,7 +25,7 @@ void setup() {
     // Initialises the communication with the ESP8266
     initCommunication();
 
-    Serial.begin(9600);
+    Serial.begin(115200);
     vectorSet(target, 5, 5);
 }
 
@@ -49,18 +49,27 @@ void loop() {
             vectorSet(target, 5, 5);
             needsPathUpdate = 1;
         }
-    }
-    
-    /*
-    for(int y = 0; y < 24; y++) {
-        for(int x = 0; x < 24; x++) {
-            Serial.print(getMatrixValue(lowResMap, x, y));
-            Serial.print("  ");
+        if(c == 'm') {
+            for(int y = 0; y < 24; y++) {
+                for(int x = 0; x < 24; x++) {
+                    unsigned char c = getMatrixValue(lowResMap, x, y);
+                    if(c == 255)
+                        Serial.print("WWW");
+                    if(c < 255 && c >= 100)
+                        Serial.print(c);
+                    if(c < 100 && c >= 10) {
+                        Serial.print(" ");Serial.print(c);
+                    }
+                    if(c < 10) {
+                        Serial.print("  ");Serial.print(c);
+                    }
+                    Serial.print(" ");
+                }
+                Serial.println();
+            }
+            Serial.println("\n\n");
         }
-        Serial.println();
     }
-    Serial.println("\n\n");
-    */
 
     // Updates the communication with the ESP8266
     // (Retrives or sends information to the user if necessary)
@@ -71,8 +80,10 @@ void loop() {
     updateNavigation();
     
     // Updates the speed of the motors
-    updateMotors();
+    //updateMotors();
 
     // Lauches a new sonar measurement
     updateSonar();
+
+    //Serial.print("Distance: ");Serial.print(lastDistance);Serial.print(" cm: ");Serial.print(lastDistance/pixelLength);Serial.println(" px");
 }
