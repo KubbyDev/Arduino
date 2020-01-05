@@ -1,21 +1,14 @@
-Joystick
-
-Tous les boutons sont des interrupteurs entre la masse et un des fils (pas de sortie analogique)
-Le C marche pas tres bien
-
-Masse:            Orange
-Joystick avant:   Jaune 
-Joystick arriere: Bleu
-Joystick droite:  Marron
-Joystick gauche:  Blanc
-Bouton A:         Rouge
-Bouton B:         Noir
-Bouton C:         Gris
-Bouton Joystick:  Vert
-
-
+Old Joystick found in the garage:
+All buttons are simple switches, each between the ground and one of the wires.
+Ground:            Orange
+Joystick forward:  Yellow 
+Joystick backward: Blue
+Joystick right:    Brown
+Joystick left:     White
+Button A:          Red
+Button B:          Black
+Button C:          Gray
+Button Joystick:   Green
 
 Ethernet shield
-
-Adresse IP: 192.168.0.136
-Adresse MAC: 90A2 DA0E A57E
+MAC: 90A2 DA0E A57E
